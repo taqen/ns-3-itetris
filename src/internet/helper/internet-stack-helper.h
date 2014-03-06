@@ -29,14 +29,23 @@
 #include "ns3/ipv4-l3-protocol.h"
 #include "ns3/ipv6-l3-protocol.h"
 #include "internet-trace-helper.h"
+#include "ns3/c2c-l3-protocol.h"                 //iTETRIS
+#include "ns3/c2c-common-header.h"
+#include "ns3/c2c-routing-helper.h"
+#include "ns3/c2c.h"
+
 
 namespace ns3 {
 
 class Node;
 class Ipv4RoutingHelper;
 class Ipv6RoutingHelper;
+class c2cRoutingHelper;                      //iTETRIS
 
 /**
+ * \brief iTETRIS [WP600] :[modified] - Modified to include c2c/c2cTransport functionality.
+ * \brief by Vineet Kumar <Vineet.Kumar@hitachi-eu.com>
+ *
  * \brief aggregate IP/TCP/UDP functionality to existing Nodes.
  *
  * This helper enables pcap and ascii tracing of events in the internet stack
@@ -114,6 +123,23 @@ public:
   void SetRoutingHelper (const Ipv6RoutingHelper &routing);
 
   /**
+   * \brief Set IPv6 routing helper.
+   * \param routing IPv6 routing helper
+   */
+  void SetRoutingHelper (const c2cRoutingHelper &routing);
+
+  /**
+   * \param routing a new routing helper
+   *
+   * Set the routing helper to use during Install. The routing
+   * helper is really an object factory which is used to create
+   * an object of type ns3::c2cRoutingHelper per node. This routing
+   * object is then associated to a single ns3::c2c object through its
+   * ns3::c2c::SetRoutingProtocol.
+   */
+  void SetRoutingHelper (const c2cRoutingHelper &routing);
+
+  /**
    * Aggregate implementations of the ns3::Ipv4, ns3::Ipv6, ns3::Udp, and ns3::Tcp classes
    * onto the provided node.  This method will assert if called on a node that 
    * already has an Ipv4 object aggregated to it.
@@ -185,6 +211,12 @@ public:
    * \param enable enable state
    */
   void SetIpv6StackInstall (bool enable);
+
+  /**
+   * \brief Enable/disable c2c stack install.
+   * \param enable enable state
+   */
+  void Setc2cStackInstall (bool enable);                 //iTETRIS
 
   /**
    * \brief Enable/disable IPv4 ARP Jitter.
@@ -270,9 +302,15 @@ private:
    */
   virtual void EnableAsciiIpv6Internal (Ptr<OutputStreamWrapper> stream, 
                                         std::string prefix, 
-                                        Ptr<Ipv6> ipv6, 
+                                        Ptr<Ipv6> ipv6,
                                         uint32_t interface,
                                         bool explicitFilename);
+
+  virtual void EnableAsciic2cInternal (Ptr<OutputStreamWrapper> stream,
+                                          std::string prefix,
+                                          Ptr<c2c> C2C,
+                                          uint32_t interface,
+                                          bool explicitFilename);
 
   /**
    * \brief Initialize the helper to its default values
@@ -296,6 +334,23 @@ private:
    * \brief IPv6 routing helper.
    */
   const Ipv6RoutingHelper *m_routingv6;
+
+
+  /**
+  * \internal
+  * \brief c2c routing helper.
+  */
+  const c2cRoutingHelper *m_routingc2c;                 //iTETRIS
+
+  /**
+   * \internal
+   */
+  static void LogRxc2c (std::string context, Ptr<const Packet> packet, uint32_t deviceId);
+
+  /**
+   * \internal
+   */
+  static void LogTxc2c (std::string context, Ptr<const Packet> packet, uint32_t deviceId);
 
   /**
    * \internal
@@ -350,6 +405,24 @@ private:
   /**
    * \internal
    *
+   * \brief checks if there is an hook to a Pcap wrapper
+   * \param ipv6 pointer to the IPv6 object
+   * \returns true if a hook is found
+   */
+  bool PcapHooked (Ptr<c2c> C2C);
+
+  /**
+   * \internal
+   *
+   * \brief checks if there is an hook to an ascii output stream
+   * \param ipv6 pointer to the IPv6 object
+   * \returns true if a hook is found
+   */
+  bool AsciiHooked (Ptr<c2c> C2C);
+
+  /**
+   * \internal
+   *
    * \brief IPv4 install state (enabled/disabled) ?
    */
   bool m_ipv4Enabled;
@@ -360,6 +433,11 @@ private:
    * \brief IPv6 install state (enabled/disabled) ?
    */
   bool m_ipv6Enabled;
+
+  /**
+  * \brief c2c install state (enabled/disabled) ?
+  */
+  bool m_c2cEnabled;                                    //iTETRIS
 
   /**
    * \internal
