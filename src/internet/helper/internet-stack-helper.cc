@@ -343,13 +343,6 @@ InternetStackHelper::SetRoutingHelper (const Ipv6RoutingHelper &routing)
 }
 
 void
-InternetStackHelper::SetRoutingHelper (const c2cRoutingHelper &routing)
-{
-  delete m_routingv6;
-  m_routingv6 = routing.Copy ();
-}
-
-void
 InternetStackHelper::SetRoutingHelper (const c2cRoutingHelper &routing)         //iTETRIS
 {
   delete m_routingc2c;
@@ -743,76 +736,6 @@ InternetStackHelper::EnablePcapIpv6Internal (std::string prefix, Ptr<Ipv6> ipv6,
     {
       //
       // Ptr<Ipv6> is aggregated to node and Ipv6L3Protocol is aggregated to 
-      // node so we can get to Ipv6L3Protocol through Ipv6.
-      //
-      Ptr<Ipv6L3Protocol> ipv6L3Protocol = ipv6->GetObject<Ipv6L3Protocol> ();
-      NS_ASSERT_MSG (ipv6L3Protocol, "InternetStackHelper::EnablePcapIpv6Internal(): "
-                     "m_ipv6Enabled and ipv6L3Protocol inconsistent");
-
-      bool result = ipv6L3Protocol->TraceConnectWithoutContext ("Tx", MakeCallback (&Ipv6L3ProtocolRxTxSink));
-      NS_ASSERT_MSG (result == true, "InternetStackHelper::EnablePcapIpv6Internal():  "
-                     "Unable to connect ipv6L3Protocol \"Tx\"");
-
-      result = ipv6L3Protocol->TraceConnectWithoutContext ("Rx", MakeCallback (&Ipv6L3ProtocolRxTxSink));
-      NS_ASSERT_MSG (result == true, "InternetStackHelper::EnablePcapIpv6Internal():  "
-                     "Unable to connect ipv6L3Protocol \"Rx\"");
-    }
-
-  g_interfaceFileMapIpv6[std::make_pair (ipv6, interface)] = file;
-}
-
-bool
-InternetStackHelper::PcapHooked (Ptr<Ipv6> ipv6)
-{
-  for (  InterfaceFileMapIpv6::const_iterator i = g_interfaceFileMapIpv6.begin ();
-         i != g_interfaceFileMapIpv6.end ();
-         ++i)
-    {
-      if ((*i).first.first == ipv6)
-        {
-          return true;
-        }
-    }
-  return false;
-}
-
-void
-InternetStackHelper::EnablePcapIpv6Internal (std::string prefix, Ptr<Ipv6> ipv6, uint32_t interface, bool explicitFilename)
-{
-  NS_LOG_FUNCTION (prefix << ipv6 << interface);
-
-  if (!m_ipv6Enabled)
-    {
-      NS_LOG_INFO ("Call to enable Ipv6 pcap tracing but Ipv6 not enabled");
-      return;
-    }
-
-  //
-  // We have to create a file and a mapping from protocol/interface to file
-  // irrespective of how many times we want to trace a particular protocol.
-  //
-  PcapHelper pcapHelper;
-
-  std::string filename;
-  if (explicitFilename)
-    {
-      filename = prefix;
-    }
-  else
-    {
-      filename = pcapHelper.GetFilenameFromInterfacePair (prefix, ipv6, interface);
-    }
-
-  Ptr<PcapFileWrapper> file = pcapHelper.CreateFile (filename, std::ios::out, PcapHelper::DLT_RAW);
-
-  //
-  // However, we only hook the trace source once to avoid multiple trace sink
-  // calls per event (connect is independent of interface).
-  //
-  if (!PcapHooked (ipv6))
-    {
-      //
-      // Ptr<Ipv6> is aggregated to node and Ipv6L3Protocol is aggregated to
       // node so we can get to Ipv6L3Protocol through Ipv6.
       //
       Ptr<Ipv6L3Protocol> ipv6L3Protocol = ipv6->GetObject<Ipv6L3Protocol> ();
