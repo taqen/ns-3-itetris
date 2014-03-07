@@ -523,6 +523,8 @@ private:
   InterferenceHelper m_interference;    //!< Pointer to InterferenceHelper
   Time m_channelSwitchDelay;            //!< Time required to switch between channel
 
+  void SetChannelNumberInit (uint16_t id); // Added by Ramon Bauza
+
 };
 
 } // namespace ns3

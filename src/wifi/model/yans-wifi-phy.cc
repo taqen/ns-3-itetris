@@ -119,7 +119,7 @@ YansWifiPhy::GetTypeId (void)
     .AddAttribute ("ChannelNumber",
                    "Channel center frequency = Channel starting frequency + 5 MHz * nch",
                    UintegerValue (1),
-                   MakeUintegerAccessor (&YansWifiPhy::SetChannelNumber,
+                   MakeUintegerAccessor (&YansWifiPhy::SetChannelNumberInit,
                                          &YansWifiPhy::GetChannelNumber),
                    MakeUintegerChecker<uint16_t> ())
     .AddAttribute ("Frequency", "The operating frequency.",
@@ -372,15 +372,22 @@ YansWifiPhy::SetChannel (Ptr<YansWifiChannel> channel)
 }
 
 void
+YansWifiPhy::SetChannelNumberInit (uint16_t nch)
+{
+  NS_LOG_DEBUG("start at channel " << nch);
+  m_channelNumber = nch;
+}
+
+void
 YansWifiPhy::SetChannelNumber (uint16_t nch)
 {
-  if (Simulator::Now () == Seconds (0))
-    {
-      // this is not channel switch, this is initialization
-      NS_LOG_DEBUG ("start at channel " << nch);
-      m_channelNumber = nch;
-      return;
-    }
+//  if (Simulator::Now () == Seconds (0))
+//    {
+//      // this is not channel switch, this is initialization
+//      NS_LOG_DEBUG ("start at channel " << nch);
+//      m_channelNumber = nch;
+//      return;
+//    }
 
   NS_ASSERT (!IsStateSwitching ());
   switch (m_state->GetState ())
