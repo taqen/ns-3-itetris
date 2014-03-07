@@ -1393,6 +1393,19 @@ WifiPhy::GetOfdmRate150MbpsBW40MHz ()
   return mode;
 }
 
+// Added by Ramon Bauza
+bool
+WifiPhy::IsNodeActivated (void)
+{
+  return (m_isNodeActivated);
+}
+
+// Added by Ramon Bauza
+void
+WifiPhy::SetNodeStatus (bool activated)
+{
+  m_isNodeActivated = activated;
+}
 
 
 std::ostream& operator<< (std::ostream& os, enum WifiPhy::State state)
