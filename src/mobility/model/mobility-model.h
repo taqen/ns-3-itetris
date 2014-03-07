@@ -23,6 +23,7 @@
 #include "ns3/vector.h"
 #include "ns3/object.h"
 #include "ns3/traced-callback.h"
+#include "ns3/node.h" // Added Ramon Bauza 16/09/10
 
 namespace ns3 {
 
@@ -65,6 +66,11 @@ public:
    * \return the relative speed between the two objects. Unit is meters/s.
    */
   double GetRelativeSpeed (Ptr<const MobilityModel> other) const;
+
+  float GetAntennaHeight (void) const; // Added Ramon Bauza 16/09/10
+  virtual void SetAntennaHeight (const float &antennaHeight); // Added Ramon Bauza 21/09/10
+  Ptr<Node> GetNode (void) const; // Added Ramon Bauza 16/09/10
+  void SetNode (Ptr<Node> node); // Added Ramon Bauza 16/09/10
   /**
    * Assign a fixed random variable stream number to the random variables
    * used by this model. Return the number of streams (possibly zero) that
@@ -115,6 +121,10 @@ private:
    * or position has occurred.
    */
   TracedCallback<Ptr<const MobilityModel> > m_courseChangeTrace;
+
+  virtual float DoGetAntennaHeight (void) const; // Added Ramon Bauza 21/09/10
+  Ptr<Node> m_node; // Added Ramon Bauza 16/09/10
+  float m_antennaHeight; // Added Ramon Bauza 21/09/10
 
 };
 
