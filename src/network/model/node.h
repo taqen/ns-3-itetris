@@ -55,6 +55,28 @@ class Address;
 class Node : public Object
 {
 public:
+
+  /**
+  * C2C Packet type and subtype
+  */
+
+//C2C Packet type
+  static const uint16_t C2C_ANY;
+  static const uint16_t C2C_BEACON;
+  static const uint16_t C2C_UNICAST;
+  static const uint16_t C2C_GEOANYCAST;
+  static const uint16_t C2C_GEOBCAST;
+  static const uint16_t C2C_TSB;
+  static const uint16_t C2C_LS;
+
+//C2C Packet subtype
+  static const uint8_t C2C_LS_REQUEST;
+  static const uint8_t C2C_LS_REPLY;
+  static const uint8_t C2C_GEOBROADCAST_CIRCLE;
+  static const uint8_t C2C_GEOBROADCAST_RECT;
+  static const uint8_t C2C_GEOANYCAST_CIRCLE;
+  static const uint8_t C2C_GEOANYCAST_RECT;
+
   static TypeId GetTypeId (void);
 
   Node();
@@ -194,6 +216,8 @@ public:
    */
   static bool ChecksumEnabled (void);
 
+  bool IsMobileNode (void); // Added by Ramon Bauza
+  void SetMobileNode (bool mobileNode); // Added by Ramon Bauza
 
 protected:
   /**
@@ -228,6 +252,8 @@ private:
   std::vector<Ptr<Application> > m_applications;
   ProtocolHandlerList m_handlers;
   DeviceAdditionListenerList m_deviceAdditionListeners;
+
+  bool m_isMobileNode; // Added by Ramon Bauza
 };
 
 } // namespace ns3
