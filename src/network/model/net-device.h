@@ -331,6 +331,10 @@ public:
    */
   virtual bool SupportsSendFrom (void) const = 0;
 
+  virtual void ActivateNetDevice (void) const {}; // Added by Ramon Bauza
+
+  virtual void DeactivateNetDevice (void) const {}; // Added by Ramon Bauza
+
 };
 
 } // namespace ns3
