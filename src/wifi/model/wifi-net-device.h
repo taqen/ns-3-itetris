@@ -121,6 +121,11 @@ protected:
    * \param to
    */
    void ForwardUp (Ptr<Packet> packet, Mac48Address from, Mac48Address to);
+
+   virtual void ActivateNetDevice (void) const; // Added by Ramon Bauza
+
+   virtual void DeactivateNetDevice (void) const; // Added by Ramon Bauza
+
 private:
   // This value conforms to the 802.11 specification
   static const uint16_t MAX_MSDU_SIZE = 2304;
