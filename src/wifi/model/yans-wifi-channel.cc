@@ -1,6 +1,8 @@
 /* -*- Mode:C++; c-file-style:"gnu"; indent-tabs-mode:nil; -*- */
 /*
  * Copyright (c) 2006,2007 INRIA
+ *            2009-2010, Uwicore Laboratory (www.uwicore.umh.es),
+ *            University Miguel Hernandez, EU FP7 iTETRIS project
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 as
@@ -15,7 +17,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
- * Author: Mathieu Lacage, <mathieu.lacage@sophia.inria.fr>
+ * Author: Mathieu Lacage, <mathieu.lacage@sophia.inria.fr>, Ramon Bauza <rbauza@umh.es>
  */
 #include "ns3/packet.h"
 #include "ns3/simulator.h"
@@ -56,6 +58,8 @@ YansWifiChannel::GetTypeId (void)
 }
 
 YansWifiChannel::YansWifiChannel ()
+  : m_interferenceRangeVehicle (3000),
+    m_interferenceRangeCiu (5000)
 {
 }
 YansWifiChannel::~YansWifiChannel ()
@@ -86,16 +90,44 @@ YansWifiChannel::Send (Ptr<YansWifiPhy> sender, Ptr<const Packet> packet, double
     {
       if (sender != (*i))
         {
+          Ptr<MobilityModel> receiverMobility = (*i)->GetMobility ()->GetObject<MobilityModel> ();
+
+          NS_LOG_DEBUG ("   Does node " << receiverMobility->GetNode()->GetId()<< " process the incoming packet? from node " << senderMobility->GetNode()->GetId());
+
           // For now don't account for inter channel interference
           if ((*i)->GetChannelNumber () != sender->GetChannelNumber ())
             {
               continue;
             }
 
-          Ptr<MobilityModel> receiverMobility = (*i)->GetMobility ()->GetObject<MobilityModel> ();
+          if (!(*i)->IsNodeActivated())
+          {
+            NS_LOG_DEBUG ("   no, it is off");
+            continue;
+          }
+
+          if (senderMobility->GetNode()->IsMobileNode() && receiverMobility->GetNode()->IsMobileNode())
+            {
+              // Both nodes are vehicles
+              if (senderMobility->GetDistanceFrom(receiverMobility) > m_interferenceRangeVehicle)
+              {
+                NS_LOG_DEBUG ("   no, it is out of the interference range");
+                continue;
+              }
+            }
+          else
+            {
+              // One of the nodes is a CIU
+              if (senderMobility->GetDistanceFrom(receiverMobility) > m_interferenceRangeCiu)
+              {
+                NS_LOG_DEBUG ("   no, it is out of the interference range");
+                continue;
+              }
+            }
+
           Time delay = m_delay->GetDelay (senderMobility, receiverMobility);
           double rxPowerDbm = m_loss->CalcRxPower (txPowerDbm, senderMobility, receiverMobility);
-          NS_LOG_DEBUG ("propagation: txPower=" << txPowerDbm << "dbm, rxPower=" << rxPowerDbm << "dbm, " <<
+          NS_LOG_DEBUG (" yes it does. propagation: txPower=" << txPowerDbm << "dbm, rxPower=" << rxPowerDbm << "dbm, " <<
                         "distance=" << senderMobility->GetDistanceFrom (receiverMobility) << "m, delay=" << delay);
           Ptr<Packet> copy = packet->Copy ();
           Ptr<Object> dstNetDevice = m_phyList[j]->GetDevice ();
@@ -145,6 +177,18 @@ YansWifiChannel::AssignStreams (int64_t stream)
   int64_t currentStream = stream;
   currentStream += m_loss->AssignStreams (stream);
   return (currentStream - stream);
+}
+
+void
+YansWifiChannel::SetInterferenceRangeVehicle (float range)
+{
+  m_interferenceRangeVehicle = range;
+}
+
+void
+YansWifiChannel::SetInterferenceRangeCiu (float range)
+{
+  m_interferenceRangeCiu = range;
 }
 
 } // namespace ns3

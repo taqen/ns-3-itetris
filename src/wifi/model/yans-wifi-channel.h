@@ -100,6 +100,9 @@ public:
   */
   int64_t AssignStreams (int64_t stream);
 
+  void SetInterferenceRangeVehicle (float range);
+  void SetInterferenceRangeCiu (float range);
+
 private:
   //YansWifiChannel& operator = (const YansWifiChannel &);
   //YansWifiChannel (const YansWifiChannel &);
@@ -126,6 +129,9 @@ private:
   PhyList m_phyList; //!< List of YansWifiPhys connected to this YansWifiChannel
   Ptr<PropagationLossModel> m_loss; //!< Propagation loss model
   Ptr<PropagationDelayModel> m_delay; //!< Propagation delay model
+
+  float m_interferenceRangeVehicle;
+  float m_interferenceRangeCiu;
 };
 
 } // namespace ns3
