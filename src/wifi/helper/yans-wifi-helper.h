@@ -1,6 +1,8 @@
 /* -*- Mode:C++; c-file-style:"gnu"; indent-tabs-mode:nil; -*- */
 /*
  * Copyright (c) 2008 INRIA
+ *            2009-2010, Uwicore Laboratory (www.uwicore.umh.es),
+ *            University Miguel Hernandez, EU FP7 iTETRIS project
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 as
@@ -15,7 +17,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
- * Author: Mathieu Lacage <mathieu.lacage@sophia.inria.fr>
+ * Author: Mathieu Lacage <mathieu.lacage@sophia.inria.fr>, Ramon Bauza <rbauza@umh.es>
  */
 #ifndef YANS_WIFI_HELPER_H
 #define YANS_WIFI_HELPER_H
@@ -125,6 +127,24 @@ public:
    * Create a channel based on the configuration parameters set previously.
    */
   Ptr<YansWifiChannel> Create (void) const;
+
+  /**
+   * \returns a new channel to be used for V2V and V2I transmissions. Modification introduced for the iTETRIS platform
+   *
+   * Create a channel introducing a fixed interference range for both V2V and to V2I transmissions according to the instructions contained
+   * in the iTETRIS ns-3 configuration files for WAVE-equipped vehicles.
+   * This command was created in the iTETRIS project in order to provide channels with interference range
+   * calculation for V2V and V2I transmissions aimed at save simulation time.
+   * The interference ranges for V2V and V2I transmissions can be set in this class by the wave-installer
+   * class based on the instructions contained in the iTETRIS ns-3 configuration files for WAVE-equipped vehicles.
+   * The interference range is the maximum distance separating transmitting and receiving nodes that
+   * the simulator considers for interference and packet reception computation. these values have to
+   * be set considering that fixing a given propagation channel model and a transmission power, the probability
+   * of packet receptions beyond a given distance is negligible. This solution permits to higly reduce
+   * the simulation time given that the computations for packet receptions are made only
+   * for nodes within the interference range.
+   */
+  Ptr<YansWifiChannel> Create (float InterferenceRangeVehicle, float InterferenceRangeVehicleCIU) const;
 
   /**
   * Assign a fixed random variable stream number to the random variables
