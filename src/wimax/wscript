@@ -49,7 +49,13 @@ def build(bld):
             'model/wimax-tlv.cc',
             'model/cs-parameters.cc',
             'model/wimax-mac-to-mac-header.cc',
+	    'model/bs-command-manager.cc',
+	    'model/ss-command-manager.cc',
             'helper/wimax-helper.cc',
+	    'helper/wimax-command-manager-helper.cc',
+	    'helper/wimax-app-helper.cc',
+	    'helper/bs-command-manager-container.cc',
+	    'helper/ss-command-manager-container.cc'
 		            ]
 
     obj_test = bld.create_ns3_module_test_library('wimax')
@@ -109,7 +115,13 @@ def build(bld):
             'model/ipcs-classifier.h',
             'model/bvec.h',
             'model/wimax-mac-to-mac-header.h',
+	    'model/bs-command-manager.h',
+	    'model/ss-command-manager.h',
             'helper/wimax-helper.h',
+	    'helper/wimax-command-manager-helper.h',
+	    'helper/wimax-app-helper.h',
+	    'helper/bs-command-manager-container.h',
+	    'helper/ss-command-manager-container.h'
 		            ]
 
     if bld.env['ENABLE_EXAMPLES']:
