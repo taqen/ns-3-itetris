@@ -123,12 +123,6 @@ public:
   void SetRoutingHelper (const Ipv6RoutingHelper &routing);
 
   /**
-   * \brief Set IPv6 routing helper.
-   * \param routing IPv6 routing helper
-   */
-  void SetRoutingHelper (const c2cRoutingHelper &routing);
-
-  /**
    * \param routing a new routing helper
    *
    * Set the routing helper to use during Install. The routing
