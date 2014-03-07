@@ -1,6 +1,8 @@
 /* -*- Mode:C++; c-file-style:"gnu"; indent-tabs-mode:nil; -*- */
 /*
  * Copyright (c) 2008 INRIA
+ *            2009-2010, Uwicore Laboratory (www.uwicore.umh.es),
+ *            University Miguel Hernandez, EU FP7 iTETRIS project
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 as
@@ -15,7 +17,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
- * Author: Mathieu Lacage <mathieu.lacage@sophia.inria.fr>
+ * Author: Mathieu Lacage <mathieu.lacage@sophia.inria.fr>, Ramon Bauza <rbauza@umh.es>
  */
 
 #include "ns3/trace-helper.h"
@@ -153,6 +155,31 @@ Ptr<YansWifiChannel>
 YansWifiChannelHelper::Create (void) const
 {
   Ptr<YansWifiChannel> channel = CreateObject<YansWifiChannel> ();
+  Ptr<PropagationLossModel> prev = 0;
+  for (std::vector<ObjectFactory>::const_iterator i = m_propagationLoss.begin (); i != m_propagationLoss.end (); ++i)
+    {
+      Ptr<PropagationLossModel> cur = (*i).Create<PropagationLossModel> ();
+      if (prev != 0)
+        {
+          prev->SetNext (cur);
+        }
+      if (m_propagationLoss.begin () == i)
+        {
+          channel->SetPropagationLossModel (cur);
+        }
+      prev = cur;
+    }
+  Ptr<PropagationDelayModel> delay = m_propagationDelay.Create<PropagationDelayModel> ();
+  channel->SetPropagationDelayModel (delay);
+  return channel;
+}
+
+Ptr<YansWifiChannel>  //// created for iTETRIS
+YansWifiChannelHelper::Create (float InterferenceRangeVehicle, float InterferenceRangeVehicleCIU) const
+{
+  Ptr<YansWifiChannel> channel = CreateObject<YansWifiChannel> ();
+  channel->SetInterferenceRangeVehicle(InterferenceRangeVehicle);
+  channel->SetInterferenceRangeCiu(InterferenceRangeVehicleCIU);
   Ptr<PropagationLossModel> prev = 0;
   for (std::vector<ObjectFactory>::const_iterator i = m_propagationLoss.begin (); i != m_propagationLoss.end (); ++i)
     {
