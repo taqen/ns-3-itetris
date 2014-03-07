@@ -63,4 +63,10 @@ def build(bld):
         'helper/radvd-helper.h',
         ]
 
+#    bld.recurse('C2C-IP')
+#   bld.recurse('CAMrecv')
+#    bld.recurse('DENM')
+#    bld.recurse('DvbhApp')
+#    bld.recurse('iTETRIS-Application')
+
     bld.ns3_python_bindings()
