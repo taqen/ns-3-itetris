@@ -366,5 +366,19 @@ WifiNetDevice::SupportsSendFrom (void) const
   return m_mac->SupportsSendFrom ();
 }
 
+// Added by Ramon Bauza
+void
+WifiNetDevice::ActivateNetDevice (void) const
+{
+  m_phy->SetNodeStatus (true);
+}
+
+// Added by Ramon Bauza
+void
+WifiNetDevice::DeactivateNetDevice (void) const
+{
+  m_phy->SetNodeStatus (false);
+}
+
 } // namespace ns3
 
