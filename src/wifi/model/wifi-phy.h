@@ -1053,6 +1053,9 @@ public:
    */
   virtual void SetChannelBonding (bool channelbonding) = 0 ;
 
+  bool IsNodeActivated (void); // Added by Ramon Bauza
+  void SetNodeStatus (bool activated); // Added by Ramon Bauza
+
 private:
   /**
    * The trace source fired when a packet begins the transmission process on
@@ -1124,6 +1127,8 @@ private:
    * \see class CallBackTraceSource
    */
   TracedCallback<Ptr<const Packet>, uint16_t, uint16_t, uint32_t, bool,uint8_t> m_phyMonitorSniffTxTrace;
+
+  bool m_isNodeActivated; // Added by Ramon Bauza
 
 };
 
