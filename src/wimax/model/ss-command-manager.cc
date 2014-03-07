@@ -189,8 +189,8 @@ SsCommandManager::InitiateConnection (void)
   serviceFlow->SetSfid(BSserviceFlow->GetSfid());     
   Ptr<WimaxConnection> connection= BSserviceFlow->GetConnection();
   SetMyCid(connection->GetCid());
-  Ptr<WimaxConnection> transportConnection = CreateObject<WimaxConnection> (m_cid,Cid::CID_TRANSPORT);
-  m_ssDevice->GetConnectionManager()->AddConnection(transportConnection,Cid::CID_TRANSPORT);
+  Ptr<WimaxConnection> transportConnection = CreateObject<WimaxConnection> (m_cid,Cid::TRANSPORT);
+  m_ssDevice->GetConnectionManager()->AddConnection(transportConnection,Cid::TRANSPORT);
   serviceFlow->SetConnection(transportConnection);
   serviceFlow->SetIsEnabled(true);
   m_ssDevice->SetAreServiceFlowsAllocated(true);
@@ -209,8 +209,8 @@ SsCommandManager::InitiateConnectionIp (Ipv4Address ssIpAddress, ServiceFlow::Di
   serviceFlow->SetSfid (BSserviceFlow->GetSfid()); 
   Ptr<WimaxConnection> connection= BSserviceFlow->GetConnection();
   SetMyCid(connection->GetCid());
-  Ptr<WimaxConnection> transportConnection = CreateObject<WimaxConnection> (m_cid,Cid::CID_TRANSPORT);
-  m_ssDevice->GetConnectionManager()->AddConnection(transportConnection,Cid::CID_TRANSPORT);
+  Ptr<WimaxConnection> transportConnection = CreateObject<WimaxConnection> (m_cid,Cid::TRANSPORT);
+  m_ssDevice->GetConnectionManager()->AddConnection(transportConnection,Cid::TRANSPORT);
   serviceFlow->SetConnection(transportConnection);
   serviceFlow->SetIsEnabled(true);
   m_ssDevice->SetAreServiceFlowsAllocated(true);
@@ -222,13 +222,13 @@ SsCommandManager::InitiateConnectionIp (Ipv4Address ssIpAddress, ServiceFlow::Di
 void
 SsCommandManager::Bconnection (Cid c)
 {
-  m_ssDevice->SetBasicConnection (CreateObject<WimaxConnection> (c,Cid::CID_BASIC));
+  m_ssDevice->SetBasicConnection (CreateObject<WimaxConnection> (c,Cid::BASIC));
 }
 
 void
 SsCommandManager::Pconnection(Cid c)
 {
-  m_ssDevice->SetPrimaryConnection (CreateObject<WimaxConnection> (c,Cid::CID_PRIMARY));
+  m_ssDevice->SetPrimaryConnection (CreateObject<WimaxConnection> (c,Cid::PRIMARY));
 }
 
 void

@@ -29,6 +29,7 @@ def build(bld):
 	'wimax-installer.cc',
 	'wimax-bs-installer.cc',
 	'wimax-vehicle-installer.cc',
+	'dvbh-helper.cc'
         ]
 
     headers = bld(features='ns3header')
@@ -62,6 +63,7 @@ def build(bld):
 	'wimax-installer.h',
 	'wimax-bs-installer.h',
 	'wimax-vehicle-installer.h',
+	'dvbh-helper.h'
         ]
 
     if bld.env['ENABLE_LIBXML2']:
