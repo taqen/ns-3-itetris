@@ -36,6 +36,23 @@ NS_LOG_COMPONENT_DEFINE ("Node");
 
 namespace ns3 {
 
+//C2C Packet type
+const uint16_t Node::C2C_ANY = 0;
+const uint16_t Node::C2C_BEACON = 1;
+const uint16_t Node::C2C_UNICAST = 2;
+const uint16_t Node::C2C_GEOANYCAST = 3;
+const uint16_t Node::C2C_GEOBCAST = 4;
+const uint16_t Node::C2C_TSB = 5;
+const uint16_t Node::C2C_LS = 6;
+
+//C2C Packet subtype
+const uint8_t Node::C2C_LS_REQUEST = 0;
+const uint8_t Node::C2C_LS_REPLY = 1;
+const uint8_t Node::C2C_GEOBROADCAST_CIRCLE = 0;
+const uint8_t Node::C2C_GEOBROADCAST_RECT = 1;
+const uint8_t Node::C2C_GEOANYCAST_CIRCLE = 0;
+const uint8_t Node::C2C_GEOANYCAST_RECT = 1;
+
 NS_OBJECT_ENSURE_REGISTERED (Node)
   ;
 
@@ -74,7 +91,8 @@ Node::GetTypeId (void)
 
 Node::Node()
   : m_id (0),
-    m_sid (0)
+    m_sid (0),
+    m_isMobileNode (false)
 {
   NS_LOG_FUNCTION (this);
   Construct ();
@@ -357,5 +375,16 @@ Node::NotifyDeviceAdded (Ptr<NetDevice> device)
     }  
 }
  
+bool // Added by Ramon Bauza
+Node::IsMobileNode (void)
+{
+  return m_isMobileNode;
+}
+
+void // Added by Ramon Bauza
+Node::SetMobileNode (bool mobileNode)
+{
+  m_isMobileNode = mobileNode;
+}
 
 } // namespace ns3
