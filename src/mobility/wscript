@@ -19,8 +19,10 @@ def build(bld):
         'model/steady-state-random-waypoint-mobility-model.cc',
         'model/waypoint.cc',
         'model/waypoint-mobility-model.cc',
+	'model/itetris-mobility-model.cc',
         'helper/mobility-helper.cc',
         'helper/ns2-mobility-helper.cc',
+	'helper/itetris-pos-helper.cc'
         ]
 
     mobility_test = bld.create_ns3_module_test_library('mobility')
@@ -50,8 +52,10 @@ def build(bld):
         'model/steady-state-random-waypoint-mobility-model.h',
         'model/waypoint.h',
         'model/waypoint-mobility-model.h',
+	'model/itetris-mobility-model.h',
         'helper/mobility-helper.h',
         'helper/ns2-mobility-helper.h',
+	'helper/itetris-pos-helper.h'
         ]
 
     if (bld.env['ENABLE_EXAMPLES']):

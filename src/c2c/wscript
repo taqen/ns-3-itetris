@@ -54,7 +54,8 @@ def build(bld):
 	'helper/IPCIU-facilities-helper.cc',
 	'helper/DENMhelper.cc',
 	'helper/CAMmanage-helper.cc',
-	'helper/application-helper.cc'
+	'helper/application-helper.cc',
+	'helper/c2c-facilities-helper.cc'
         ]
 
     headers = bld(features='ns3header')
@@ -111,7 +112,8 @@ def build(bld):
 	'helper/C2C-IP-helper.h',
 	'helper/IPCIU-facilities-helper.h',
 	'helper/DENMhelper.h',
-	'helper/application-helper.h'
+	'helper/application-helper.h',
+	'helper/c2c-facilities-helper.h'
        ]
        
     if bld.env['ENABLE_EXAMPLES']:
