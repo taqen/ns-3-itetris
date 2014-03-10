@@ -107,6 +107,14 @@ public:
   static bool IsFinished (void);
 
   /**
+   * Porting Old API for iTETRIS
+   * If Simulator::isFinished returns true, the behavior of this
+   * method is undefined. Otherwise, it returns the microsecond-based
+   * time of the next event expected to be scheduled.
+   */
+  static Time Next (void);
+
+  /**
    * Run the simulation until one of:
    *   - no events are present anymore
    *   - the user called Simulator::Stop()
@@ -115,6 +123,12 @@ public:
    *     is greater than or equal to the stop time.
    */
   static void Run (void);
+
+  /**
+   * Porting Old API for iTETRIS
+   * Process only the next simulation event, then return immediately.
+   */
+  static void RunOneEvent (void);
 
   /**
    * If an event invokes this method, it will be the last

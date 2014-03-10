@@ -86,6 +86,10 @@ public:
   void SetHardLimit (Time limit);
   Time GetHardLimit (void) const;
 
+  //Porting Old API for iTETRIS
+  virtual Time Next (void) const {return Time(0);}
+  virtual void RunOneEvent (void) {}
+
 private:
   bool Running (void) const;
   bool Realtime (void) const;
