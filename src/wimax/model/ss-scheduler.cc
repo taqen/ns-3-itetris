@@ -169,6 +169,27 @@ SSScheduler::SelectConnection (void)
   std::vector<ServiceFlow*>::const_iterator iter;
   std::vector<ServiceFlow*> serviceFlows;
 
+  // Added by Ramon
+  if (GetWimaxVersionType () == WIMAX_VERSION_DEFAULT)
+    {
+      NS_LOG_INFO ("SS Scheduler: Selecting connection...");
+      if (m_ss->GetInitialRangingConnection ()->HasPackets ())
+        {
+          NS_LOG_INFO ("Return GetInitialRangingConnection");
+          return m_ss->GetInitialRangingConnection ();
+        }
+      if (m_ss->GetBasicConnection ()->HasPackets ())
+        {
+          NS_LOG_INFO ("Return GetBasicConnection");
+          return m_ss->GetBasicConnection ();
+        }
+      if (m_ss->GetPrimaryConnection ()->HasPackets ())
+        {
+          NS_LOG_INFO ("Return GetPrimaryConnection");
+          return m_ss->GetPrimaryConnection ();
+        }
+    }
+
   NS_LOG_INFO ("SS Scheduler: Selecting connection...");
   if (m_ss->GetInitialRangingConnection ()->HasPackets ())
     {
@@ -246,6 +267,20 @@ SSScheduler::SelectConnection (void)
     }
   NS_LOG_INFO ("NO connection is selected!");
   return 0;
+}
+
+// Added by Ramon
+void
+SSScheduler::SetWimaxVersionType (WimaxVersionType versionType)
+{
+  m_wimaxVersionType = versionType;
+}
+
+// Added by Ramon
+WimaxVersionType
+SSScheduler::GetWimaxVersionType ()
+{
+  return m_wimaxVersionType;
 }
 
 } // namespace ns3

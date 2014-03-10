@@ -66,6 +66,11 @@ public:
    * \param type the type of connection to add
    */
   void AddConnection (Ptr<WimaxConnection> connection, Cid::Type type);
+  // Added by Ramon
+  void ClearConnection(Cid cid);
+  // Added by Ramon
+  void DeleteSetupConnection (const Mac48Address &address) const;
+
   /**
    * \return the connection which has as identifier cid
    */
@@ -86,6 +91,8 @@ private:
   std::vector<Ptr<WimaxConnection> > m_multicastConnections;
   // only for BS
   CidFactory *m_cidFactory;
+  // Added by Ramon
+  std::list<std::pair<Mac48Address, Cid* > > *m_connectionSetupListItetris;
 };
 
 } // namespace ns3

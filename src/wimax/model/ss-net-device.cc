@@ -787,27 +787,50 @@ SubscriberStationNetDevice::DoReceive (Ptr<Packet> packet)
                     Simulator::Cancel (m_lostDlMapEvent);
                   }
 
-                m_linkManager->ScheduleScanningRestart (m_lostDlMapInterval, EVENT_LOST_DL_MAP, false, m_lostDlMapEvent);
+                // Added by Ramon
+                if (GetWimaxVersionType () == WIMAX_VERSION_DEFAULT)
+                  {
+                    m_linkManager->ScheduleScanningRestart (m_lostDlMapInterval, EVENT_LOST_DL_MAP, false, m_lostDlMapEvent);
+                  }
+                //m_linkManager->ScheduleScanningRestart (m_lostDlMapInterval, EVENT_LOST_DL_MAP, false, m_lostDlMapEvent);
 
                 if (m_dcdWaitTimeoutEvent.IsRunning ())
                   {
                     Simulator::Cancel (m_dcdWaitTimeoutEvent);
                   }
 
-                m_linkManager->ScheduleScanningRestart (m_intervalT1,
-                                                        EVENT_DCD_WAIT_TIMEOUT,
-                                                        false,
-                                                        m_dcdWaitTimeoutEvent);
+                // Added by Ramon
+                if (GetWimaxVersionType () == WIMAX_VERSION_DEFAULT)
+                  {
+                    m_linkManager->ScheduleScanningRestart (m_intervalT1,
+                                                            EVENT_DCD_WAIT_TIMEOUT,
+                                                            false,
+                                                            m_dcdWaitTimeoutEvent);
+                  }
+
+//                m_linkManager->ScheduleScanningRestart (m_intervalT1,
+//                                                        EVENT_DCD_WAIT_TIMEOUT,
+//                                                        false,
+//                                                        m_dcdWaitTimeoutEvent);
 
                 if (m_ucdWaitTimeoutEvent.IsRunning ())
                   {
                     Simulator::Cancel (m_ucdWaitTimeoutEvent);
                   }
 
-                m_linkManager->ScheduleScanningRestart (m_intervalT12,
-                                                        EVENT_UCD_WAIT_TIMEOUT,
-                                                        true,
-                                                        m_ucdWaitTimeoutEvent);
+                // Added by Ramon
+                if (GetWimaxVersionType () == WIMAX_VERSION_DEFAULT)
+                  {
+                    m_linkManager->ScheduleScanningRestart (m_intervalT12,
+                                                          EVENT_UCD_WAIT_TIMEOUT,
+                                                          true,
+                                                          m_ucdWaitTimeoutEvent);
+                  }
+
+//                m_linkManager->ScheduleScanningRestart (m_intervalT12,
+//                                                        EVENT_UCD_WAIT_TIMEOUT,
+//                                                        true,
+//                                                        m_ucdWaitTimeoutEvent);
 
                 DlMap dlmap;
                 packet->RemoveHeader (dlmap);
@@ -904,6 +927,14 @@ SubscriberStationNetDevice::DoReceive (Ptr<Packet> packet)
                   }
                 break;
               }
+              // Added by Ramon
+              case ManagementMessageType::MESSAGE_TYPE_MBS_MAP:
+                {
+                  DlMap mbsmap;
+                  packet->RemoveHeader (mbsmap);
+                  ProcessMbsMap (mbsmap);
+                  break;
+                }
             default:
               NS_FATAL_ERROR ("Invalid management message type");
             }
@@ -1250,6 +1281,25 @@ SubscriberStationNetDevice::ProcessUcd (const Ucd &ucd)
     }
 }
 
+// Added by Ramon
+void
+SubscriberStationNetDevice::ProcessMbsMap (const DlMap &mbsmap)
+{
+  std::list<OfdmDlMapIe> mbsMapElements = mbsmap.GetDlMapElements ();
+
+  for (std::list<OfdmDlMapIe>::iterator iter = mbsMapElements.begin (); iter
+      != mbsMapElements.end (); ++iter)
+    {
+      if (iter->GetDiuc () == OfdmDlBurstProfile::DIUC_END_OF_MAP)
+        break;
+
+          /*here the SS shall actually acquire the start time it shall start receiving the burst at. start time is used for power saving
+           which is not implemented here, furthermore there is no need since the simulator architecture automatically callbacks the receive
+           function. shall acquire the DIUC (burst profile) as well to decode the burst, again not required again because the callback
+          mechanism automatically passes it as parameter.*/
+    }
+}
+
 /*temporarily assuming registered if ranging is complete,
  shall actually consider the registration step also */
 bool
@@ -1277,6 +1327,28 @@ SubscriberStationNetDevice::SetTimer (EventId eventId, EventId &event)
     }
 
   event = eventId;
+}
+
+void
+SubscriberStationNetDevice::StartItetris (void)
+{
+  SetReceiveCallback ();
+
+  GetPhy ()->SetPhyParameters ();
+  GetPhy ()->SetDataRates ();
+  GetPhy()->SetState(WimaxPhy::PHY_STATE_OFF);
+  m_intervalT20 = Seconds (4 * GetPhy ()->GetFrameDuration ().GetSeconds ());
+
+  ItetrisCreateBroadcastConnection();
+  Stop();
+
+}
+
+// Added by Ramon
+void
+SubscriberStationNetDevice::DoSetWimaxVersionType (WimaxVersionType versionType)
+{
+  m_scheduler->SetWimaxVersionType (versionType);
 }
 
 } // namespace ns`

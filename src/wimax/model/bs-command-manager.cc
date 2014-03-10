@@ -324,7 +324,7 @@ BsCommandManager::ConnectSS (Mac48Address ssAddress, ServiceFlow* SSserviceFlow)
 {
   ServiceFlow* BSserviceFlow;
   SSRecord* ssRecord = m_bsDevice->GetSSManager()->GetSSRecord(ssAddress);
-  Ptr<WimaxConnection> transportConnection = m_bsDevice->GetConnectionManager()->CreateConnection  (Cid::CID_TRANSPORT); 
+  Ptr<WimaxConnection> transportConnection = m_bsDevice->GetConnectionManager()->CreateConnection  (Cid::TRANSPORT); 
   BSserviceFlow = new ServiceFlow (m_sfidIndex++, ServiceFlow::SF_DIRECTION_DOWN, transportConnection);
   BSserviceFlow->SetServiceSchedulingType (SSserviceFlow->GetSchedulingType ()); 
   BSserviceFlow->SetConnection(transportConnection);
@@ -333,9 +333,9 @@ BsCommandManager::ConnectSS (Mac48Address ssAddress, ServiceFlow* SSserviceFlow)
   BSserviceFlow->SetType(ServiceFlow::SF_TYPE_ACTIVE);
   ssRecord->AddServiceFlow(BSserviceFlow);
   m_bsDevice->GetUplinkScheduler()->SetupServiceFlow (ssRecord, BSserviceFlow);
-  Ptr<WimaxConnection> basicConnection = m_bsDevice->GetConnectionManager()->CreateConnection (Cid::CID_BASIC);
+  Ptr<WimaxConnection> basicConnection = m_bsDevice->GetConnectionManager()->CreateConnection (Cid::BASIC);
   ssRecord->SetBasicCid (basicConnection->GetCid ());
-  Ptr<WimaxConnection> primaryConnection =m_bsDevice->GetConnectionManager()-> CreateConnection (Cid::CID_PRIMARY);
+  Ptr<WimaxConnection> primaryConnection =m_bsDevice->GetConnectionManager()-> CreateConnection (Cid::PRIMARY);
   ssRecord->SetPrimaryCid (primaryConnection->GetCid ());
   ssRecord->SetAreServiceFlowsAllocated(true);
   Ptr<SsCommandManager> sscm= GetSsManager(ssAddress);
@@ -363,14 +363,14 @@ ServiceFlow*
 BsCommandManager::ConnectSSIp (Mac48Address ssAddress, ServiceFlow* SSserviceFlow, Ipv4Address ssIpAddress, ServiceFlow::Direction direction)
 {
   SSRecord* ssRecord = m_bsDevice->GetSSManager()->GetSSRecord(ssAddress);
-  Ptr<WimaxConnection> transportConnection = m_bsDevice->GetConnectionManager()->CreateConnection  (Cid::CID_TRANSPORT); 
+  Ptr<WimaxConnection> transportConnection = m_bsDevice->GetConnectionManager()->CreateConnection  (Cid::TRANSPORT); 
   ServiceFlow* BSserviceFlow = CreateServiceFlowUnicast (transportConnection, ssIpAddress, direction);
   transportConnection->SetServiceFlow (BSserviceFlow);
   ssRecord->AddServiceFlow(BSserviceFlow);
   m_bsDevice->GetUplinkScheduler()->SetupServiceFlow (ssRecord, BSserviceFlow);
-  Ptr<WimaxConnection> basicConnection = m_bsDevice->GetConnectionManager()->CreateConnection (Cid::CID_BASIC);
+  Ptr<WimaxConnection> basicConnection = m_bsDevice->GetConnectionManager()->CreateConnection (Cid::BASIC);
   ssRecord->SetBasicCid (basicConnection->GetCid ());
-  Ptr<WimaxConnection> primaryConnection =m_bsDevice->GetConnectionManager()-> CreateConnection (Cid::CID_PRIMARY);
+  Ptr<WimaxConnection> primaryConnection =m_bsDevice->GetConnectionManager()-> CreateConnection (Cid::PRIMARY);
   ssRecord->SetPrimaryCid (primaryConnection->GetCid ());
   ssRecord->SetAreServiceFlowsAllocated(true);
   Ptr<SsCommandManager> sscm= GetSsManager(ssAddress);
@@ -664,7 +664,7 @@ BsCommandManager::DeleteConnection(Cid cid, uint32_t sfid)
 void
 BsCommandManager::InitiateBroadcastConnection(void)
 {
-  Ptr<WimaxConnection> conn = m_bsDevice->GetConnectionManager()->CreateConnection (Cid::CID_MULTICAST);
+  Ptr<WimaxConnection> conn = m_bsDevice->GetConnectionManager()->CreateConnection (Cid::MULTICAST);
   NS_LOG_INFO ("Broadcast data connection established");
   conn->SetServiceFlow (CreateServiceFlowBroadcast(conn));
 }
@@ -768,7 +768,7 @@ BsCommandManager::SendBroadcastPacket (void)
 {
   Ptr<Packet> packet = Create<Packet> (50);  
   std::vector<Ptr<WimaxConnection> > connections;
-  connections = m_bsDevice-> GetConnectionManager()->GetConnections(Cid::CID_MULTICAST) ;
+  connections = m_bsDevice-> GetConnectionManager()->GetConnections(Cid::MULTICAST) ;
   Ptr<WimaxConnection> connection = connections.at((0));
   if (!(m_bsDevice->Enqueue (packet, MacHeaderType (),connection)))  
     {
@@ -805,7 +805,7 @@ BsCommandManager::InitiateMulticastConnections(uint8_t numGroups)
 {
   for (uint8_t i=0; i<numGroups; i++)
     {
-      m_bsDevice->GetConnectionManager()-> CreateConnection (Cid::CID_MULTICAST);
+      m_bsDevice->GetConnectionManager()-> CreateConnection (Cid::MULTICAST);
       m_nSSgroup[i]=0;
     }
   m_noGroups=numGroups;
@@ -833,7 +833,7 @@ void
 BsCommandManager::SendMulticastPacket(uint8_t groupId)
 {
   std::vector<Ptr<WimaxConnection> > connections;
-  connections = m_bsDevice-> GetConnectionManager()->GetConnections(Cid::CID_MULTICAST) ;
+  connections = m_bsDevice-> GetConnectionManager()->GetConnections(Cid::MULTICAST) ;
   Ptr<WimaxConnection> connection = connections.at((groupId));
   if (groupId>m_noGroups || groupId==0)
     {

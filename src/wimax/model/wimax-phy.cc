@@ -106,6 +106,14 @@ WimaxPhy::Attach (Ptr<WimaxChannel> channel)
   DoAttach (channel);
 }
 
+// Added by Ramon
+void
+WimaxPhy::DisAttach(void)
+{
+  DoDisAttach();
+  m_channel = 0;
+}
+
 Ptr<WimaxChannel>
 WimaxPhy::GetChannel (void) const
 {

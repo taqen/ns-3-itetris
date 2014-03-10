@@ -29,7 +29,6 @@ def build(bld):
         'model/c2c-list-routing.cc',
         'model/c2c-route.cc',
         'model/c2c-routing-protocol.cc',
-        'model/c2c-transport.cc',
 	'model/socketc2c.cc',
 	'model/socket-factoryc2c.cc',
 	'model/location-table.cc',
@@ -55,7 +54,6 @@ def build(bld):
 	'helper/DENMhelper.cc',
 	'helper/CAMmanage-helper.cc',
 	'helper/application-helper.cc',
-	'helper/c2c-facilities-helper.cc'
         ]
 
     headers = bld(features='ns3header')
@@ -85,7 +83,6 @@ def build(bld):
         'model/c2c-list-routing.h',
         'model/c2c-route.h',
         'model/c2c-routing-protocol.h',
-        'model/c2c-transport.h',
 	'model/socketc2c.h',
 	'model/socket-factoryc2c.h',
 	'model/c2c.h',

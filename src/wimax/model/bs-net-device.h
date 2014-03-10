@@ -43,6 +43,8 @@ class BurstProfileManager;
 class BSLinkManager;
 class UplinkScheduler;
 class BsServiceFlowManager;
+// Added by Ramon
+class BsCommandManager;
 
 /**
  * \ingroup wimax
@@ -52,7 +54,9 @@ class BaseStationNetDevice : public WimaxNetDevice
 public:
   enum State
   {
-    BS_STATE_DL_SUB_FRAME, BS_STATE_UL_SUB_FRAME, BS_STATE_TTG, BS_STATE_RTG
+    // Modified Ramon
+//    BS_STATE_DL_SUB_FRAME, BS_STATE_UL_SUB_FRAME, BS_STATE_TTG, BS_STATE_RTG
+    BS_STATE_DL_SUB_FRAME, BS_STATE_UL_SUB_FRAME, BS_STATE_TTG, BS_STATE_RTG, BS_STATE_ON, BS_STATE_OFF, BS_STATE_INITIALIZATION
   };
 
   enum MacPreamble
@@ -210,6 +214,8 @@ public:
   Time GetSymbolDuration (void) const;
 
   void Start (void);
+  // Added by Ramon
+  void StartItetris (void);
   void Stop (void);
   /**
    * \brief Enqueue a packet into a connection queue
@@ -225,6 +231,11 @@ public:
 
   Ptr<BsServiceFlowManager> GetServiceFlowManager (void) const;
   void SetServiceFlowManager (Ptr<BsServiceFlowManager> );
+
+  // Added by Ramon
+  void Add(Ptr<BsCommandManager> manager);
+  uint32_t GetBsFrameNr(void);
+  void SetBsFrameNr(uint32_t nrFrames);
 private:
   void DoDispose (void);
   void StartFrame (void);
@@ -233,6 +244,19 @@ private:
   void StartUlSubFrame (void);
   void EndUlSubFrame (void);
   void EndFrame (void);
+  // Added Ramon
+  void
+  StartFrameItetris (void);
+  void
+  StartDlSubFrameItetris (void);
+  void
+  EndDlSubFrameItetris (void);
+  void
+  StartUlSubFrameItetris (void);
+  void
+  EndUlSubFrameItetris (void);
+  void
+  EndFrameItetris (void);
 
   bool DoSend (Ptr<Packet> packet, const Mac48Address& source, const Mac48Address& dest, uint16_t protocolNumber);
   void DoReceive (Ptr<Packet> packet);
@@ -250,6 +274,8 @@ private:
   Ptr<Packet> CreateDcd (void);
   Ptr<Packet> CreateUlMap (void);
   Ptr<Packet> CreateUcd (void);
+  // Added by Ramon
+  Ptr<Packet> CreateMbsMap (void);
   void SetDlBurstProfiles (Dcd *dcd);
   void SetUlBurstProfiles (Ucd *ucd);
 
@@ -315,6 +341,10 @@ private:
   // same fields as in PHY, for quick access
   Time m_psDuration;
   Time m_symbolDuration;
+
+  // Added by Ramon
+  uint32_t m_BsFrameNr;
+  Ptr<BsCommandManager> m_bsCommandManager;
 
   TracedCallback<Ptr<const Packet>, Mac48Address, Cid> m_traceBSRx;
 

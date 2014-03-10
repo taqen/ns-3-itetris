@@ -22,7 +22,8 @@ def build(bld):
 	'model/itetris-mobility-model.cc',
         'helper/mobility-helper.cc',
         'helper/ns2-mobility-helper.cc',
-	'helper/itetris-pos-helper.cc'
+	'helper/itetris-pos-helper.cc',
+	'helper/utils/geo-utils.cc',
         ]
 
     mobility_test = bld.create_ns3_module_test_library('mobility')
@@ -55,7 +56,8 @@ def build(bld):
 	'model/itetris-mobility-model.h',
         'helper/mobility-helper.h',
         'helper/ns2-mobility-helper.h',
-	'helper/itetris-pos-helper.h'
+	'helper/itetris-pos-helper.h',
+	'helper/utils/geo-utils.h',
         ]
 
     if (bld.env['ENABLE_EXAMPLES']):

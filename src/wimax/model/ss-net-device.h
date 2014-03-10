@@ -245,6 +245,8 @@ public:
                   MacHeaderType::HeaderType packetType = MacHeaderType::HEADER_TYPE_GENERIC);
 
   void Start (void);
+  // Added by Ramon
+  void StartItetris (void);
   void Stop (void);
 
   /**
@@ -288,6 +290,9 @@ public:
    */
   void SetServiceFlowManager (Ptr<SsServiceFlowManager> );
 
+  // Added by Ramon
+  void DoSetWimaxVersionType (WimaxVersionType versionType);
+
 private:
   static Time GetDefaultLostDlMapInterval ();
 
@@ -299,6 +304,8 @@ private:
   void ProcessUlMap (const UlMap &ulmap);
   void ProcessDcd (const Dcd &dcd);
   void ProcessUcd (const Ucd &ucd);
+  // Added by Ramon
+  void ProcessMbsMap (const DlMap &mbsmap);
 
   // parameters defined in Table 342
   Time m_lostDlMapInterval; // in milliseconds, time since last received DL-MAP before downlink synchronization is considered lost, maximum is 600

@@ -29,6 +29,8 @@
 #include "wimax-phy.h"
 #include "wimax-mac-header.h"
 
+#include "ns3/wimax-version-type.h"
+
 namespace ns3 {
 
 class SubscriberStationNetDevice;
@@ -58,6 +60,9 @@ public:
                              WimaxPhy::ModulationType modulationType,
                              MacHeaderType::HeaderType packetType, Ptr<WimaxConnection> &connection);
 
+  // Added by Ramon
+  void SetWimaxVersionType (WimaxVersionType versionType);
+  WimaxVersionType GetWimaxVersionType (void);
 
   void DoDispose (void);
 protected:
@@ -69,6 +74,8 @@ private:
   Ptr<SubscriberStationNetDevice> m_ss;
   bool m_pollMe;
 
+  // Added by Ramon
+  WimaxVersionType m_wimaxVersionType;
 };
 
 } // namespace ns3

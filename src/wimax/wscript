@@ -117,6 +117,7 @@ def build(bld):
             'model/wimax-mac-to-mac-header.h',
 	    'model/bs-command-manager.h',
 	    'model/ss-command-manager.h',
+	    'model/wimax-version-type.h',
             'helper/wimax-helper.h',
 	    'helper/wimax-command-manager-helper.h',
 	    'helper/wimax-app-helper.h',

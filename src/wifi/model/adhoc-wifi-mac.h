@@ -26,6 +26,9 @@
 
 #include "amsdu-subframe-header.h"
 
+#include "ns3/switching-manager.h"
+
+
 namespace ns3 {
 
 /**
@@ -61,8 +64,15 @@ public:
    */
   virtual void Enqueue (Ptr<const Packet> packet, Mac48Address to);
 
+  virtual void SetBasicBlockAckTimeout (Time blockAckTimeout);
+  virtual void SetCompressedBlockAckTimeout (Time blockAckTimeout);
+  virtual Time GetBasicBlockAckTimeout (void) const;
+  virtual Time GetCompressedBlockAckTimeout (void) const;
+  virtual void SetQueuesForSwitchingMngr (Ptr<SwitchingManager> switchingManager);
+
 private:
   virtual void Receive (Ptr<Packet> packet, const WifiMacHeader *hdr);
+
 };
 
 } // namespace ns3

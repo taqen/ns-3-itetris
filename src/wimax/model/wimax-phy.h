@@ -53,7 +53,9 @@ public:
 
   enum PhyState
   {
-    PHY_STATE_IDLE, PHY_STATE_SCANNING, PHY_STATE_TX, PHY_STATE_RX
+    // Modified by Ramon
+//    PHY_STATE_IDLE, PHY_STATE_SCANNING, PHY_STATE_TX, PHY_STATE_RX
+    PHY_STATE_IDLE, PHY_STATE_SCANNING, PHY_STATE_TX, PHY_STATE_RX, PHY_STATE_OFF, PHY_STATE_ON
   };
 
   enum PhyType
@@ -69,6 +71,8 @@ public:
    * \param channel the channel to which the physical layer will be attached
    */
   void Attach (Ptr<WimaxChannel> channel);
+  // Added by Ramon
+  void DisAttach (void);
   /**
    * \return the channel to which this physical layer is attached
    */
@@ -314,6 +318,11 @@ public:
   * \return the number of stream indices assigned by this model
   */
   virtual int64_t AssignStreams (int64_t stream) = 0;
+
+  // Added by Ramon
+  virtual void DoDisAttach(void)=0;
+  virtual void DoSetTxPower(double txPower)=0;
+  virtual double DoGetTxPower(void)=0;
 
 private:
   void GetModulationFecParams (ModulationType modulationType, uint8_t &bitsPerSymbol, double &fecCode) const;

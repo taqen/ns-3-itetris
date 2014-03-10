@@ -79,6 +79,8 @@ public:
   bool GetPollMeBit (void) const;
 
   void AddServiceFlow (ServiceFlow *serviceFlow);
+  // Added by Ramon
+  void ClearServiceFlow(ServiceFlow *serviceFlow);
   std::vector<ServiceFlow*> GetServiceFlows (enum ServiceFlow::SchedulingType schedulingType) const;
   bool GetHasServiceFlowUgs (void) const;
   bool GetHasServiceFlowRtps (void) const;

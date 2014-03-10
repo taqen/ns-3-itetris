@@ -233,4 +233,11 @@ WifiHelper::AssignStreams (NetDeviceContainer c, int64_t stream)
   return (currentStream - stream);
 }
 
+// Added by Ramon Bauza
+void
+WifiHelper::Set (std::string name, const AttributeValue &v)
+{
+  m_stationManager.Set (name, v);
+}
+
 } // namespace ns3

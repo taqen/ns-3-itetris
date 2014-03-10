@@ -51,6 +51,13 @@ WimaxChannel::Attach (Ptr<WimaxPhy> phy)
   DoAttach (phy);
 }
 
+// Added by Ramon
+void
+WimaxChannel::DisAttach (Ptr<WimaxPhy> phy)
+{
+  DoDisAttach (phy);
+}
+
 uint32_t
 WimaxChannel::GetNDevices (void) const
 {

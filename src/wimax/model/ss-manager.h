@@ -55,6 +55,8 @@ public:
   bool IsInRecord (const Mac48Address &macAddress) const;
   bool IsRegistered (const Mac48Address &macAddress) const;
   void DeleteSSRecord (Cid cid);
+  // Added by Ramon
+  void DeleteSSRecord (SSRecord *ssRecord);
   Mac48Address GetMacAddress (Cid cid) const;
   uint32_t GetNSSs (void) const;
   uint32_t GetNRegisteredSSs (void) const;

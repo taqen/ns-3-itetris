@@ -41,6 +41,9 @@
 #include "ns3/bs-scheduler-rtps.h"
 #include "ns3/trace-helper.h"
 
+// Added by Ramon
+#include "ns3/wimax-version-type.h"
+
 namespace ns3 {
 
 class WimaxChannel;
@@ -183,6 +186,14 @@ public:
                               SchedulerType schedulerType,
                               double frameDuration);
 
+  // Added by Ramon
+  NetDeviceContainer Install (NodeContainer c,
+                              NetDeviceType deviceType,
+                              PhyType phyType,
+                              Ptr<WimaxChannel> channel,
+                              SchedulerType schedulerType,
+                              WimaxVersionType versionType);
+
   /**
    * \brief Set the propagation and loss model of the channel. By default the channel
    *  uses a COST231 propagation and loss model.
@@ -233,6 +244,14 @@ public:
                                PhyType phyType,
                                Ptr<WimaxChannel> channel,
                                SchedulerType schedulerType);
+
+  // Added by Ramon
+  Ptr<WimaxNetDevice> Install (Ptr<Node> node,
+                               NetDeviceType deviceType,
+                               PhyType phyType,
+                               Ptr<WimaxChannel> channel,
+                               SchedulerType schedulerType,
+                               WimaxVersionType versionType);
 
   /**
    * \brief Creates a transport service flow.

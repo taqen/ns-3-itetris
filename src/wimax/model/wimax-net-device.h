@@ -36,6 +36,8 @@
 #include "ns3/log.h"
 #include "wimax-phy.h"
 #include "wimax-mac-header.h"
+// Added by Ramon
+#include "wimax-version-type.h"
 
 namespace ns3 {
 
@@ -99,6 +101,8 @@ public:
    */
   uint16_t GetRtg (void) const;
   void Attach (Ptr<WimaxChannel> channel);
+  // Added by Ramon
+  void DisAttach(void);
   /**
    * \param phy the phy layer to use.
    */
@@ -175,8 +179,14 @@ public:
    */
   void CreateDefaultConnections (void);
 
+  // Added by Ramon
+  void ItetrisCreateBroadcastConnection (void);
+
   virtual void Start (void) = 0;
   virtual void Stop (void) = 0;
+
+  // Added by Ramon
+  virtual void StartItetris (void) = 0;
 
   void SetReceiveCallback (void);
 
@@ -229,6 +239,11 @@ public:
 
   bool IsPromisc (void);
   void NotifyPromiscTrace (Ptr<Packet> p);
+
+  // Added by Ramon
+  void SetWimaxVersionType (WimaxVersionType versionType);
+  virtual void DoSetWimaxVersionType (WimaxVersionType versionType) {};
+  WimaxVersionType GetWimaxVersionType (void);
 
 private:
   WimaxNetDevice (const WimaxNetDevice &);
@@ -284,6 +299,8 @@ private:
 
   Ptr<Object> m_mobility;
 
+  // Added by Ramon
+  WimaxVersionType m_wimaxVersionType;
 };
 
 } // namespace ns3

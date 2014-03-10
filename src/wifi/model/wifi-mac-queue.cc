@@ -341,4 +341,49 @@ WifiMacQueue::PeekFirstAvailable (WifiMacHeader *hdr, Time &timestamp,
   return 0;
 }
 
+void
+WifiMacQueue::CopyToQueue (Ptr<WifiMacQueue> queue)
+{
+  queue->DoCopyToQueue(&m_queue);
+  m_size = 0;
+}
+
+void
+WifiMacQueue::DoCopyToQueue (PacketQueue* queueToCopy)
+{
+  PacketQueue::iterator it = m_queue.begin ();
+  m_queue.splice(it,*queueToCopy);
+  m_size = m_queue.size();
+}
+
+void
+WifiMacQueue::CopyFrontFromQueue (Ptr<WifiMacQueue> queue)
+{
+  queue->DoCopyFrontFromQueue (&m_queue);
+  m_size = m_queue.size ();
+}
+
+void
+WifiMacQueue::DoCopyFrontFromQueue (PacketQueue* queueFromCopy)
+{
+  PacketQueue::iterator it = (*queueFromCopy).begin ();
+  (*queueFromCopy).splice(it,m_queue);
+  m_size = 0;
+}
+
+void
+WifiMacQueue::CopyBackFromQueue (Ptr<WifiMacQueue> queue)
+{
+  queue->DoCopyBackFromQueue(&m_queue);
+  m_size = m_queue.size ();
+}
+
+void
+WifiMacQueue::DoCopyBackFromQueue (PacketQueue* queueFromCopy)
+{
+  PacketQueue::iterator it = (*queueFromCopy).end ();
+  (*queueFromCopy).splice(it,m_queue);
+  m_size = 0;
+}
+
 } // namespace ns3

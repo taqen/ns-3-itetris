@@ -61,7 +61,7 @@ WimaxBsInstaller::DoInstall (NodeContainer container)
       channel->SetPropagationModel (SimpleOfdmWimaxChannel::COST231_PROPAGATION);
     }
 
-  NetDeviceContainer devices = m_wimax.Install (container, WimaxHelper::DEVICE_TYPE_BASE_STATION, WimaxHelper::SIMPLE_PHY_TYPE_OFDM, channel, WimaxHelper::SCHED_TYPE_SIMPLE, ns3::WIMAX_VERSION_ITETRIS); 
+  NetDeviceContainer devices = m_wimax.Install (container, WimaxHelper::DEVICE_TYPE_BASE_STATION, WimaxHelper::SIMPLE_PHY_TYPE_OFDM, channel, WimaxHelper::SCHED_TYPE_SIMPLE, WIMAX_VERSION_ITETRIS);
   
   m_baseStationContainer.Add (container);
   m_baseStationDeviceContainer.Add(devices);    

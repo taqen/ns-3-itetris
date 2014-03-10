@@ -393,6 +393,8 @@ SimpleOfdmWimaxPhy::StartReceive (uint32_t burstSize,
         }
       break;
     case PHY_STATE_IDLE:
+      // Added by Ramon
+      SetSimplex (frequency);
       if (frequency == GetRxFrequency ())
         {
           if (isFirstBlock)
@@ -424,6 +426,11 @@ SimpleOfdmWimaxPhy::StartReceive (uint32_t burstSize,
         {
 
         }
+      break;
+    // Added by Ramon
+    case PHY_STATE_OFF:
+      break;
+    case PHY_STATE_ON:
       break;
     }
 }
@@ -1101,6 +1108,38 @@ SimpleOfdmWimaxPhy::AssignStreams (int64_t stream)
   NS_LOG_FUNCTION (this << stream);
   m_URNG->SetStream (stream);
   return 1;
+}
+
+// Added by Ramon
+void
+SimpleOfdmWimaxPhy::DoDisAttach (void)
+{
+  GetChannel ()->DisAttach (this);
+}
+
+// Added by Ramon
+void
+SimpleOfdmWimaxPhy::DoSetTxPower(double txPower)
+{
+  SetTxPower(txPower);
+}
+
+// Added by Ramon
+double
+SimpleOfdmWimaxPhy::DoGetTxPower(void)
+{
+  double power=GetTxPower();
+  return power;
+}
+
+// Added by Ramon
+double
+SimpleOfdmWimaxPhy::GetSNR (double rxPower)
+{
+  double Nwb = /*-114  -99.37*/ -102.37+ m_noiseFigure + 10 * log (m_bandWidth / 1000000/*1000000000*/)
+      / 2.303;
+  double SNR = rxPower - Nwb;
+  return SNR;
 }
 
 } // namespace ns3

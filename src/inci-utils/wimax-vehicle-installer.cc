@@ -28,7 +28,7 @@
 #include "ns3/vehicle-scan-mngr.h"
 #include "ns3/vehicle-sta-mgnt.h"
 #include "ns3/c2c-facilities-helper.h"
-
+#include "ns3/wimax-version-type.h"
  
 NS_LOG_COMPONENT_DEFINE ("WimaxVehicleInstaller");
 
@@ -51,7 +51,7 @@ WimaxVehicleInstaller::DoInstall (NodeContainer container)
 {
   NS_LOG_INFO ("*** WimaxVehicleInstaller ***");
 
-  NetDeviceContainer devices = m_wimax.Install (container, WimaxHelper::DEVICE_TYPE_SUBSCRIBER_STATION, WimaxHelper::SIMPLE_PHY_TYPE_OFDM, m_channel, WimaxHelper::SCHED_TYPE_SIMPLE, ns3::WIMAX_VERSION_ITETRIS);  
+  NetDeviceContainer devices = m_wimax.Install (container, WimaxHelper::DEVICE_TYPE_SUBSCRIBER_STATION, WimaxHelper::SIMPLE_PHY_TYPE_OFDM, m_channel, WimaxHelper::SCHED_TYPE_SIMPLE, WIMAX_VERSION_ITETRIS);  
   
   m_vehicleContainer.Add (container);
   m_vehicleDeviceContainer.Add (devices);

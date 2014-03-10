@@ -36,6 +36,8 @@
 #include "amsdu-subframe-header.h"
 #include "mgt-headers.h"
 
+#include "ns3/switching-manager.h"
+
 NS_LOG_COMPONENT_DEFINE ("AdhocWifiMac");
 
 namespace ns3 {
@@ -189,5 +191,40 @@ AdhocWifiMac::Receive (Ptr<Packet> packet, const WifiMacHeader *hdr)
   // Management Action frames.
   RegularWifiMac::Receive (packet, hdr);
 }
+
+void
+AdhocWifiMac::SetQueuesForSwitchingMngr (Ptr<SwitchingManager> switchingManager)
+{
+  switchingManager->SetMacQueue(m_edca[AC_VO]);
+  switchingManager->SetMacQueue(m_edca[AC_VI]);
+  switchingManager->SetMacQueue(m_edca[AC_BE]);
+  switchingManager->SetMacQueue(m_edca[AC_BK]);
+}
+
+void
+AdhocWifiMac::SetBasicBlockAckTimeout (Time blockAckTimeout)
+{
+  m_low->SetBasicBlockAckTimeout (blockAckTimeout);
+}
+
+void
+AdhocWifiMac::SetCompressedBlockAckTimeout (Time blockAckTimeout)
+{
+  m_low->SetCompressedBlockAckTimeout (blockAckTimeout);
+}
+
+Time
+AdhocWifiMac::GetBasicBlockAckTimeout (void) const
+{
+  return m_low->GetBasicBlockAckTimeout ();
+}
+
+Time
+AdhocWifiMac::GetCompressedBlockAckTimeout (void) const
+{
+  return m_low->GetCompressedBlockAckTimeout ();
+}
+
+
 
 } // namespace ns3

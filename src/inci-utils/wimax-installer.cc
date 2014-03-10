@@ -290,10 +290,10 @@ WimaxInstaller::SetWimaxParameters (NetDeviceContainer devices)
       Ptr<SimpleOfdmWimaxPhy> phy = DynamicCast<SimpleOfdmWimaxPhy> (device->GetPhy ());
       phy->SetFrequency (m_wimaxParameters.frequency);
       phy->SetChannelBandwidth (m_wimaxParameters.bandwidth);
-      phy->SetTxPower (m_wimaxParameters.txPower);
-      phy->SetNoiseFigure (m_wimaxParameters.noiseFigure);
-      phy->SetTxGain (m_wimaxParameters.txGain);
-      phy->SetRxGain (m_wimaxParameters.rxGain);
+      phy->SetAttribute("TxPower", DoubleValue(m_wimaxParameters.txPower));
+      phy->SetAttribute("NoiseFigure", DoubleValue(m_wimaxParameters.noiseFigure));
+      phy->SetAttribute("TxGain", DoubleValue(m_wimaxParameters.txGain));
+      phy->SetAttribute("RxGain", DoubleValue(m_wimaxParameters.rxGain));
     }
   DoSetWimaxParameters (devices);
 }

@@ -1161,4 +1161,53 @@ EdcaTxopN::DoInitialize ()
   m_dcf->StartBackoffNow (m_rng->GetNext (0, m_dcf->GetCw ()));
   ns3::Dcf::DoInitialize ();
 }
+
+void
+EdcaTxopN::FlushQueue (void)
+{
+  m_queue->Flush();
+}
+
+bool
+EdcaTxopN::PendingPacket (void) const
+{
+  return m_currentPacket != 0;
+}
+
+void
+EdcaTxopN::UnsetTxFailedCallback (void)
+{
+  m_txFailedCallback.Nullify();
+}
+
+void
+EdcaTxopN::UnsetTxOkCallback (void)
+{
+  m_txOkCallback.Nullify();
+}
+
+uint32_t
+EdcaTxopN::GetSizeQueue (void) const
+{
+  return m_queue->GetSize();
+}
+
+void
+EdcaTxopN::CopyToQueue (Ptr<WifiMacQueue> queue)
+{
+  m_queue->CopyToQueue(queue);
+}
+
+void
+EdcaTxopN::CopyFrontFromQueue (Ptr<WifiMacQueue> queue)
+{
+  m_queue->CopyFrontFromQueue(queue);
+}
+
+void
+EdcaTxopN::CopyBackFromQueue (Ptr<WifiMacQueue> queue)
+{
+  m_queue->CopyBackFromQueue(queue);
+}
+
 } // namespace ns3

@@ -56,7 +56,9 @@ public:
     MESSAGE_TYPE_REG_RSP = 7,
     MESSAGE_TYPE_DSA_REQ = 11,
     MESSAGE_TYPE_DSA_RSP = 12,
-    MESSAGE_TYPE_DSA_ACK = 13
+    MESSAGE_TYPE_DSA_ACK = 13,
+    // Added by Ramon
+    MESSAGE_TYPE_MBS_MAP = 14
   };
 
   ManagementMessageType (void);

@@ -5,12 +5,16 @@ def build(bld):
     module.source = [        
         'ns3-server.cc',                
         'ns3-commands.cc',
+        'tcpip/server-socket.cc',
+	'tcpip/storage.cc'
         ]
     headers = bld(features='ns3header')
     headers.module = 'inci'
     headers.source = [        
         'ns3-server.h',
 	'ns3-commands.h',
-        'ns3-comm-constants.h',        
+        'ns3-comm-constants.h',
+        'tcpip/server-socket.h',
+	'tcpip/storage.h'
         ]
 
