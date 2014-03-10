@@ -181,6 +181,21 @@ SSManager::GetNRegisteredSSs (void) const
   return nrSS;
 }
 
+// Added by Ramon
+void
+SSManager::DeleteSSRecord (SSRecord *ssRecord)
+{
+  for (std::vector<SSRecord*>::iterator iter1 = m_ssRecords->begin (); iter1
+      != m_ssRecords->end (); ++iter1)
+    {
+      if (ssRecord == *iter1)
+        {
+          m_ssRecords->erase(iter1);
+          return;
+        }
+    }
+}
+
 } // namespace ns3
 
 

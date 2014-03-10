@@ -131,7 +131,9 @@ WimaxNetDevice::WimaxNetDevice (void)
   : m_state (0),
     m_symbolIndex (0),
     m_ttg (0),
-    m_rtg (0)
+    m_rtg (0),
+    // Added by Ramon
+    m_wimaxVersionType (WIMAX_VERSION_DEFAULT)
 {
   InitializeChannels ();
   m_connectionManager = CreateObject<ConnectionManager> ();
@@ -351,6 +353,13 @@ WimaxNetDevice::Attach (Ptr<WimaxChannel> channel)
   m_phy->Attach (channel);
 }
 
+// Added by Ramon
+void
+WimaxNetDevice::DisAttach (void)
+{
+  m_phy->DisAttach ();
+}
+
 void
 WimaxNetDevice::SetPhy (Ptr<WimaxPhy> phy)
 {
@@ -506,6 +515,16 @@ WimaxNetDevice::CreateDefaultConnections (void)
   m_broadcastConnection = CreateObject<WimaxConnection> (Cid::Broadcast (), Cid::BROADCAST);
 }
 
+// Added by Ramon
+void
+WimaxNetDevice::ItetrisCreateBroadcastConnection (void)
+{
+//   m_broadcastConnection = CreateObject<WimaxConnection> (CreateObject<
+//       ConnectionIdentifier> (ConnectionIdentifier::CID_BROADCAST),
+//       WimaxConnection::CONNECTION_TYPE_BROADCAST);
+  m_broadcastConnection = CreateObject<WimaxConnection> (Cid::Broadcast (), Cid::BROADCAST);
+}
+
 void
 WimaxNetDevice::Receive (Ptr<const PacketBurst> burst)
 {
@@ -641,4 +660,20 @@ WimaxNetDevice::AddLinkChangeCallback (Callback<void> callback)
    */
   NS_FATAL_ERROR ("Not implemented-- please implement and contribute a patch");
 }
+
+// Added by Ramon
+void
+WimaxNetDevice::SetWimaxVersionType (WimaxVersionType versionType)
+{
+  m_wimaxVersionType = versionType;
+  DoSetWimaxVersionType (versionType);
+}
+
+// Added by Ramon
+WimaxVersionType
+WimaxNetDevice::GetWimaxVersionType ()
+{
+  return m_wimaxVersionType;
+}
+
 } // namespace ns3

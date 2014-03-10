@@ -109,6 +109,21 @@ SimpleOfdmWimaxChannel::DoAttach (Ptr<WimaxPhy> phy)
   m_phyList.push_back (o_phy);
 }
 
+// Added by Ramon
+void
+SimpleOfdmWimaxChannel::DoDisAttach (Ptr<WimaxPhy> phy)
+{
+  Ptr<SimpleOfdmWimaxPhy> o_phy = phy->GetObject<SimpleOfdmWimaxPhy> ();
+  for(std::list<Ptr<SimpleOfdmWimaxPhy> >:: iterator iter= m_phyList.begin(); iter!=m_phyList.end(); iter++)
+    {
+      if(o_phy==(*iter))
+        {
+         m_phyList.erase(iter);
+         break;
+        }
+   }
+}
+
 uint32_t
 SimpleOfdmWimaxChannel::DoGetNDevices (void) const
 {
@@ -215,6 +230,13 @@ SimpleOfdmWimaxChannel::AssignStreams (int64_t stream)
       currentStream += simpleOfdm->AssignStreams (currentStream);
     }
   return (currentStream - stream);
+}
+
+// Added by Ramon
+Ptr<PropagationLossModel>
+SimpleOfdmWimaxChannel::GetPropagation(void)
+{
+  return m_loss;
 }
 
 }

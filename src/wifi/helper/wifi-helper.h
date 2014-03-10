@@ -189,6 +189,8 @@ public:
   */
   int64_t AssignStreams (NetDeviceContainer c, int64_t stream);
 
+  void Set (std::string name, const AttributeValue &v); // Added by Ramon Bauza
+
 protected:
   ObjectFactory m_stationManager;
   enum WifiPhyStandard m_standard;

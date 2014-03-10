@@ -176,6 +176,12 @@ public:
    */
   void NotifyRxDrop (Ptr<PacketBurst> burst);
 
+  // Added by Ramon
+  void DoDisAttach(void);
+  void DoSetTxPower(double txPower);
+  double DoGetTxPower(void);
+  double GetSNR(double rxPower);
+
  /**
   * Assign a fixed random variable stream number to the random variables
   * used by this model.  Return the number of streams (possibly zero) that
@@ -234,6 +240,13 @@ private:
 
   double GetTxGain (void) const;
   void SetTxGain (double txgain);
+
+  // Done public by Ramon
+//   double GetRxGain (void) const;
+//   void SetRxGain (double rxgain);
+//
+//   double GetTxGain (void) const;
+//   void SetTxGain (double txgain);
 
   std::string GetTraceFilePath (void) const;
   void SetTraceFilePath (std::string path);

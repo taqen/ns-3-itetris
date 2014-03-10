@@ -255,6 +255,87 @@ ConnectionManager::HasPackets (void) const
 
   return false;
 }
+
+// Added by Ramon
+void
+ConnectionManager::ClearConnection (Cid cid)
+{
+  std::vector<Ptr<WimaxConnection> >::iterator iter;
+  Ptr<WimaxConnection> connection = GetConnection (cid);
+  switch (connection->GetType())
+    {
+      case Cid::BASIC:
+        {
+          for (iter = m_basicConnections.begin (); iter != m_basicConnections.end (); ++iter)
+            {
+              if ((*iter)->GetCid () == cid)
+                {
+                  m_basicConnections.erase(iter);
+                  break;
+                }
+            }
+          break;
+        }
+      case Cid::PRIMARY:
+        {
+          for (iter = m_primaryConnections.begin (); iter != m_primaryConnections.end (); ++iter)
+            {
+              if ((*iter)->GetCid () == cid)
+                {
+                  m_primaryConnections.erase(iter);
+                  break;
+                }
+            }
+          break;
+        }
+      case Cid::TRANSPORT:
+        {
+          for (iter = m_transportConnections.begin (); iter != m_transportConnections.end (); ++iter)
+            {
+              if ((*iter)->GetCid () == cid)
+                {
+                  m_transportConnections.erase(iter);
+                  break;
+                }
+            }
+          break;
+        }
+      case Cid::MULTICAST:
+        {
+          for (iter = m_multicastConnections.begin (); iter != m_multicastConnections.end (); ++iter)
+            {
+              if ((*iter)->GetCid () == cid)
+                {
+                  m_multicastConnections.erase(iter);
+                  break;
+                }
+            }
+          break;
+        }
+      default:
+        {
+          NS_FATAL_ERROR ("Invalid connection type");
+          break;
+        }
+    }
+}
+
+// Added by Ramon
+void
+ConnectionManager::DeleteSetupConnection (const Mac48Address &address) const
+{
+  std::list<std::pair<Mac48Address, Cid* > >::iterator iter;
+  for (iter = m_connectionSetupListItetris->begin (); iter !=  m_connectionSetupListItetris->end (); ++iter)
+    {
+      if (address == (*iter).first)
+        {
+          m_connectionSetupListItetris->erase (iter);
+          break;
+        }
+    }
+  return;
+}
+
 } // namespace ns3
 
 

@@ -36,7 +36,8 @@ def build(bld):
         'helper/udp-echo-helper.cc',
         'helper/v4ping-helper.cc',
         'helper/radvd-helper.cc',
-	'helper/Dvbh-App-helper.cc'
+	'helper/Dvbh-App-helper.cc',
+	'helper/Umts-App-helper.cc'
         ]
 
     applications_test = bld.create_ns3_module_test_library('applications')
@@ -80,7 +81,8 @@ def build(bld):
         'helper/udp-echo-helper.h',
         'helper/v4ping-helper.h',
         'helper/radvd-helper.h',
-	'helper/Dvbh-App-helper.h'
+	'helper/Dvbh-App-helper.h',
+	'helper/Umts-App-helper.h'
         ]
 
 #    bld.recurse('C2C-IP')

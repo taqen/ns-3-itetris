@@ -151,6 +151,9 @@ public:
   void IncreaseBackloggedTemp (uint32_t backloggedTemp);
   uint32_t GetBackloggedTemp (void) const;
 
+  // Ramon
+  void Reset (void);
+
 private:
   uint32_t m_grantSize; // only used for UGS flow
   Time m_grantTimeStamp; // allocation (for data) for UGS flows and unicast poll (for bandwidth requests) for non-UGS flows

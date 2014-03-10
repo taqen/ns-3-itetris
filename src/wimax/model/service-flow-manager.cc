@@ -188,4 +188,18 @@ ServiceFlowManager::GetNrServiceFlows (void) const
   return m_serviceFlows->size ();
 }
 
+// Added by Ramon
+void
+ServiceFlowManager::ClearServiceFlow (ServiceFlow *serviceFlow)
+{
+  for (std::vector<ServiceFlow *>::iterator iter=m_serviceFlows->begin(); iter!=m_serviceFlows->end();++iter)
+    {
+      if(serviceFlow == (*iter))
+        {
+          m_serviceFlows->erase(iter);
+          break;
+        }
+    }
+}
+
 } // namespace ns3

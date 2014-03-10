@@ -123,6 +123,8 @@ public:
    * packet transmission was completed unsuccessfully.
    */
   void SetTxFailedCallback (TxFailed callback);
+  void UnsetTxOkCallback (void);
+  void UnsetTxFailedCallback (void);
   /**
    * Set WifiRemoteStationsManager this EdcaTxopN is associated to.
    *
@@ -364,6 +366,13 @@ public:
   * \return the number of stream indices assigned by this model
   */
   int64_t AssignStreams (int64_t stream);
+
+  void FlushQueue (void);
+  bool PendingPacket (void) const;
+  uint32_t GetSizeQueue (void) const;
+  void CopyToQueue (Ptr<WifiMacQueue> queue);
+  void CopyFrontFromQueue (Ptr<WifiMacQueue> queue);
+  void CopyBackFromQueue (Ptr<WifiMacQueue> queue);
 
 private:
   void DoInitialize ();

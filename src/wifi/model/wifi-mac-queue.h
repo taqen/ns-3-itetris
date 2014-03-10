@@ -205,6 +205,10 @@ public:
    * \return the current queue size
    */
   uint32_t GetSize (void);
+
+  void CopyToQueue (Ptr<WifiMacQueue> queue);
+  void CopyFrontFromQueue (Ptr<WifiMacQueue> queue);
+  void CopyBackFromQueue (Ptr<WifiMacQueue> queue);
 protected:
   /**
    * Clean up the queue by removing packets that exceeded the maximum delay.
@@ -233,6 +237,9 @@ protected:
    * \return the address
    */
   Mac48Address GetAddressForPacket (enum WifiMacHeader::AddressType type, PacketQueueI it);
+  void DoCopyToQueue (PacketQueue* queueToCopy);
+  void DoCopyFrontFromQueue (PacketQueue* queueToCopy);
+  void DoCopyBackFromQueue (PacketQueue* queueToCopy);
 
   /**
    * A struct that holds information about a packet for putting

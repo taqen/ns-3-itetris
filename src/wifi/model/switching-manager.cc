@@ -22,7 +22,7 @@
 #include "switching-manager.h"
 #include "ns3/wifi-net-device.h"
 #include "ns3/log.h"
-#include "ns3/qadhoc-wifi-mac.h"
+#include "ns3/adhoc-wifi-mac.h"
 #include "edca-txop-n.h"
 #include "wifi-mac-queue.h"
 #include "wifi-mac-header.h"
@@ -31,7 +31,7 @@ NS_LOG_COMPONENT_DEFINE ("SwitchingManager");
 
 namespace ns3 {
 
-AccessClass AcVector[] = {AC_VO,AC_VI,AC_BE,AC_BK};
+AcIndex AcVector[] = {AC_VO,AC_VI,AC_BE,AC_BK};
 
 NS_OBJECT_ENSURE_REGISTERED (SwitchingManager);
 
@@ -81,7 +81,7 @@ void
 SwitchingManager::SetMacQueues (void)
 {
   Ptr<WifiNetDevice> device = DynamicCast<WifiNetDevice>(m_device);
-  Ptr<QadhocWifiMac> mac = DynamicCast<QadhocWifiMac>(device->GetMac());
+  Ptr<AdhocWifiMac> mac = DynamicCast<AdhocWifiMac>(device->GetMac());
   mac->SetQueuesForSwitchingMngr(this);
 
 }

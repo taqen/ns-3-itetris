@@ -324,6 +324,58 @@ NetDeviceContainer WimaxHelper::Install (NodeContainer c,
   return devices;
 }
 
+// Added by Ramon
+NetDeviceContainer
+WimaxHelper::Install (NodeContainer c, NetDeviceType deviceType,
+    PhyType phyType, Ptr<WimaxChannel> channel, SchedulerType schedulerType, WimaxVersionType versionType)
+{
+  NetDeviceContainer devices;
+  for (NodeContainer::Iterator i = c.Begin (); i != c.End (); i++)
+    {
+      Ptr<Node> node = *i;
+
+      Ptr<WimaxPhy> phy = CreatePhyWithoutChannel (phyType, (char*) "dummy",0);
+      Ptr<WimaxNetDevice> device;
+      Ptr<UplinkScheduler> uplinkScheduler = CreateUplinkScheduler (schedulerType);
+      Ptr<BSScheduler> bsScheduler = CreateBSScheduler (schedulerType);
+
+      if (deviceType == DEVICE_TYPE_BASE_STATION)
+        {
+          Ptr<BaseStationNetDevice> deviceBS;
+          deviceBS = CreateObject<BaseStationNetDevice> (node, phy,
+              uplinkScheduler, bsScheduler);
+          device = deviceBS;
+          uplinkScheduler->SetBs (deviceBS);
+          bsScheduler->SetBs (deviceBS);
+        }
+      else
+        {
+          device = CreateObject<SubscriberStationNetDevice> (node, phy);
+          // Added by Ramon
+          device->SetWimaxVersionType (versionType);
+        }
+      device->SetAddress (Mac48Address::Allocate ());
+      phy->SetDevice (device);
+
+      if (versionType == WIMAX_VERSION_ITETRIS)
+        {
+          device->StartItetris ();
+        }
+      else if (versionType == WIMAX_VERSION_DEFAULT)
+        {
+          device->Start ();
+        }
+
+      if(deviceType == DEVICE_TYPE_BASE_STATION)
+          {
+          device->Attach (channel);
+          }
+      node->AddDevice (device);
+      devices.Add (device);
+    }
+  return devices;
+}
+
 Ptr<WimaxNetDevice> WimaxHelper::Install (Ptr<Node> node,
                                           NetDeviceType deviceType,
                                           PhyType phyType,
@@ -353,6 +405,54 @@ Ptr<WimaxNetDevice> WimaxHelper::Install (Ptr<Node> node,
   phy->SetDevice (device);
   device->Start ();
   device->Attach (channel);
+
+  node->AddDevice (device);
+
+  return device;
+}
+
+// Added by Ramon
+Ptr<WimaxNetDevice>
+WimaxHelper::Install (Ptr<Node> node, NetDeviceType deviceType,
+    PhyType phyType, Ptr<WimaxChannel> channel, SchedulerType schedulerType, WimaxVersionType versionType)
+{
+
+  //Ptr<WimaxPhy> phy = CreatePhyWithoutChannel (phyType);
+  Ptr<WimaxPhy> phy = CreatePhyWithoutChannel (phyType, (char*) "dummy", 0);
+  Ptr<WimaxNetDevice> device;
+  Ptr<UplinkScheduler> uplinkScheduler = CreateUplinkScheduler (schedulerType);
+  Ptr<BSScheduler> bsScheduler = CreateBSScheduler (schedulerType);
+
+  if (deviceType == DEVICE_TYPE_BASE_STATION)
+    {
+      Ptr<BaseStationNetDevice> deviceBS;
+      deviceBS = CreateObject<BaseStationNetDevice> (node, phy, uplinkScheduler, bsScheduler);
+      device = deviceBS;
+      uplinkScheduler->SetBs (deviceBS);
+      bsScheduler->SetBs (deviceBS);
+    }
+  else
+    {
+      device = CreateObject<SubscriberStationNetDevice> (node, phy);
+      // Added by Ramon
+      device->SetWimaxVersionType (versionType);
+    }
+  device->SetAddress (Mac48Address::Allocate ());
+  phy->SetDevice (device);
+
+  if (versionType == WIMAX_VERSION_ITETRIS)
+    {
+      device->StartItetris ();
+    }
+  else if (versionType == WIMAX_VERSION_DEFAULT)
+    {
+      device->Start ();
+    }
+
+  if(deviceType == DEVICE_TYPE_BASE_STATION)
+    {
+      device->Attach (channel);
+    }
 
   node->AddDevice (device);
 

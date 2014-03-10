@@ -90,9 +90,13 @@ public:
   * \return the number of stream indices assigned by this model
   */
   int64_t AssignStreams (int64_t stream);
+  // Added by Ramon
+  Ptr<PropagationLossModel> GetPropagation (void);
 
 private:
   void DoAttach (Ptr<WimaxPhy> phy);
+  // Added by Ramon
+  void DoDisAttach(Ptr<WimaxPhy> phy);
   std::list<Ptr<SimpleOfdmWimaxPhy> > m_phyList;
   uint32_t DoGetNDevices (void) const;
   void EndSendDummyBlock  (Ptr<SimpleOfdmWimaxPhy> rxphy, simpleOfdmSendParam * param);

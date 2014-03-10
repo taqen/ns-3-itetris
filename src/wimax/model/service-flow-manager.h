@@ -57,6 +57,8 @@ public:
   ServiceFlow* GetServiceFlow (uint32_t sfid) const;
   ServiceFlow* GetServiceFlow (Cid cid) const;
   std::vector<ServiceFlow*> GetServiceFlows (enum ServiceFlow::SchedulingType schedulingType) const;
+  // Added by Ramon
+  void ClearServiceFlow (ServiceFlow *serviceFlow);
 
   /**
    * \return true if all service flows are allocated, false otherwise

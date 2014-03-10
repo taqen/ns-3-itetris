@@ -118,6 +118,11 @@ public:
   void SetFragmentNumber (MacHeaderType::HeaderType packetType);
   void SetFragmentOffset (MacHeaderType::HeaderType packetType, uint32_t offset);
 
+  // Added by Ramon
+  void ResetNBytes (void);
+  // Added by Ramon
+  uint32_t GetQueueSize (void) const;
+
   struct QueueElement
   {
     QueueElement (void);

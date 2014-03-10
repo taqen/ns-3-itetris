@@ -45,6 +45,8 @@
 #include "bandwidth-manager.h"
 #include "ns3/ipv4-address.h"
 #include "ns3/llc-snap-header.h"
+// Added by Ramon
+#include "bs-command-manager.h"
 
 NS_LOG_COMPONENT_DEFINE ("BaseStationNetDevice");
 
@@ -517,6 +519,30 @@ BaseStationNetDevice::Start (void)
   m_uplinkScheduler->InitOnce ();
 }
 
+// Added by Ramon
+void
+BaseStationNetDevice::StartItetris (void)
+{
+  SetReceiveCallback ();
+  GetConnectionManager ()->SetCidFactory (m_cidFactory);
+  GetPhy ()->SetPhyParameters ();
+  GetPhy ()->SetDataRates ();
+  SetTtg (GetPhy ()->GetTtg ());
+  SetRtg (GetPhy ()->GetRtg ());
+  m_psDuration = GetPhy ()->GetPsDuration ();
+  m_symbolDuration = GetPhy ()->GetSymbolDuration ();
+  GetBandwidthManager ()->SetSubframeRatio ();
+
+  CreateDefaultConnections ();
+  GetPhy ()->SetSimplex (m_linkManager->SelectDlChannel ());
+  SetState(BS_STATE_INITIALIZATION);
+  Simulator::ScheduleNow (&BaseStationNetDevice::StartFrameItetris, this);
+
+  /* shall actually be 2 symbols = 1 (preamble) + 1 (bandwidth request header)*/
+  m_bwReqOppSize = 6;
+  m_uplinkScheduler->InitOnce ();
+}
+
 void
 BaseStationNetDevice::Stop (void)
 {
@@ -535,6 +561,34 @@ BaseStationNetDevice::StartFrame (void)
   NS_LOG_INFO ("----------------------frame" << GetNrFrames () + 1 << "----------------------");
 
   StartDlSubFrame ();
+}
+
+// Added by Ramon
+void
+BaseStationNetDevice::StartFrameItetris (void)
+{
+  if (GetState() == BS_STATE_INITIALIZATION)
+   {
+    m_frameStartTime = Simulator::Now ();
+//      std::cout << "BS: " << GetMacAddress() <<" ----------------------frame "<<GetBsFrameNr()+1<<"----------------------" <<std::endl;
+     StartDlSubFrameItetris ();
+    }
+  else if (GetState() == BS_STATE_ON )
+    {
+     m_frameStartTime = Simulator::Now ();
+//      std::cout << "BS: " << GetMacAddress() <<" ----------------------frame "<<GetBsFrameNr()+1<<"----------------------" <<std::endl;
+     StartDlSubFrameItetris ();
+    }
+  else if (GetState() == BS_STATE_OFF)
+    {
+      m_frameStartTime = Simulator::Now ();
+      if (m_bsCommandManager->GetOnOff())
+        {
+          SetState (BS_STATE_ON);
+        }
+      SetBsFrameNr(GetBsFrameNr()+1);
+      Simulator::Schedule(MilliSeconds(10),&BaseStationNetDevice::StartFrameItetris,this);
+   }
 }
 
 void
@@ -556,12 +610,49 @@ BaseStationNetDevice::StartDlSubFrame (void)
                        this);
 }
 
+// Added Ramon
+void
+BaseStationNetDevice::StartDlSubFrameItetris (void)
+{
+  if(GetState()!=BS_STATE_INITIALIZATION)
+    {
+      m_bsCommandManager->SetOnOff (false);
+      SetState (BS_STATE_OFF);
+    }
+
+  m_bsCommandManager->SetSsPhyOn();
+  m_bsCommandManager->SetSsOff();
+
+  m_dlSubframeStartTime = Simulator::Now (); // same as m_frameStartTime
+
+  NS_LOG_DEBUG ("DL Itetris frame started : " << m_frameStartTime.GetSeconds ());
+
+  SetBsFrameNr (GetBsFrameNr () + 1);
+  m_direction = DIRECTION_DOWNLINK;
+  m_uplinkScheduler->Schedule ();
+  CreateMapMessages ();
+  m_scheduler->Schedule ();
+  SendBursts ();
+  Simulator::Schedule (Seconds (m_nrDlSymbols * m_symbolDuration.GetSeconds ()),
+                       &BaseStationNetDevice::EndDlSubFrameItetris,
+                       this);
+}
+
 void
 BaseStationNetDevice::EndDlSubFrame (void)
 {
   m_nrDlFrames++;
   SetState (BS_STATE_TTG);
   Simulator::Schedule (Seconds (GetTtg () * m_psDuration.GetSeconds ()), &BaseStationNetDevice::StartUlSubFrame, this);
+}
+
+// Added by Ramon
+void
+BaseStationNetDevice::EndDlSubFrameItetris (void)
+{
+  m_nrDlFrames++;
+  m_bsCommandManager->SetSsPhyOff();
+  Simulator::Schedule (Seconds (GetTtg () * m_psDuration.GetSeconds ()), &BaseStationNetDevice::StartUlSubFrameItetris, this);
 }
 
 void
@@ -579,6 +670,21 @@ BaseStationNetDevice::StartUlSubFrame (void)
                        this);
 }
 
+// Added by Ramon
+void
+BaseStationNetDevice::StartUlSubFrameItetris (void)
+{
+  m_ulSubframeStartTime = Simulator::Now ();
+
+  NS_LOG_INFO ("UL frame started : " << m_ulSubframeStartTime.GetSeconds ());
+
+  m_direction = DIRECTION_UPLINK;
+  MarkUplinkAllocations ();
+  Simulator::Schedule (Seconds (m_nrUlSymbols * m_symbolDuration.GetSeconds ()),
+                       &BaseStationNetDevice::EndUlSubFrameItetris,
+                       this);
+}
+
 void
 BaseStationNetDevice::EndUlSubFrame (void)
 {
@@ -587,10 +693,38 @@ BaseStationNetDevice::EndUlSubFrame (void)
   Simulator::Schedule (Seconds (GetRtg () * m_psDuration.GetSeconds ()), &BaseStationNetDevice::EndFrame, this);
 }
 
+// Added by Ramon
+void
+BaseStationNetDevice::EndUlSubFrameItetris (void)
+{
+  m_nrUlFrames++;
+
+  if(GetState()==BS_STATE_INITIALIZATION)
+    {
+      SetState(BS_STATE_OFF);
+    }
+  else
+    {
+      if(m_bsCommandManager->GetOnOff())
+        {
+          SetState(BS_STATE_ON);
+        }
+    }
+
+  Simulator::Schedule (Seconds (GetRtg () * m_psDuration.GetSeconds ()), &BaseStationNetDevice::EndFrameItetris, this);
+}
+
 void
 BaseStationNetDevice::EndFrame (void)
 {
   StartFrame ();
+}
+
+// Added by Ramon
+void
+BaseStationNetDevice::EndFrameItetris (void)
+{
+  StartFrameItetris ();
 }
 
 bool
@@ -867,7 +1001,9 @@ BaseStationNetDevice::DoReceive (Ptr<Packet> packet)
 void
 BaseStationNetDevice::CreateMapMessages (void)
 {
-  Ptr<Packet> dlmap, ulmap;
+  // Modified by Ramon
+//  Ptr<Packet> dlmap, ulmap;
+  Ptr<Packet> dlmap, ulmap, mbsmap;
   bool sendDcd = false, sendUcd = false, updateDcd = false, updateUcd = false;
 
   uint16_t currentNrSsRegistered = m_ssManager->GetNRegisteredSSs ();
@@ -904,6 +1040,12 @@ BaseStationNetDevice::CreateMapMessages (void)
   ulmap = CreateUlMap ();
   Enqueue (ulmap, MacHeaderType (), GetBroadcastConnection ());
   m_nrUlMapSent++;
+
+  // Added by Ramon
+  mbsmap = CreateMbsMap ();
+  Enqueue (mbsmap, MacHeaderType (), GetBroadcastConnection ());
+//   sendDcd=true;
+//   sendUcd=true;
 
   CreateDescriptorMessages (sendDcd, sendUcd);
 }
@@ -961,6 +1103,7 @@ BaseStationNetDevice::SendBursts (void)
       cid = dlMapIe->GetCid ();
       uint8_t diuc = dlMapIe->GetDiuc ();
 
+//      if (cid != GetInitialRangingConnection ()->GetCid () && cid != GetBroadcastConnection ()->GetCid ()) /*Added by Ramon*/ &&!(cid.IsMulticast()) && !(cid.IsBroadcast()) )
       if (cid != GetInitialRangingConnection ()->GetCid () && cid != GetBroadcastConnection ()->GetCid ())
         {
           if (m_serviceFlowManager->GetServiceFlow (cid) != 0)
@@ -976,7 +1119,7 @@ BaseStationNetDevice::SendBursts (void)
         {
           modulationType = WimaxPhy::MODULATION_TYPE_BPSK_12;
         }
-
+      // Distinto respecto al codigo de David
       Simulator::Schedule (txTime, &WimaxNetDevice::ForwardDown, this, burst, modulationType);
       txTime += GetPhy ()->GetTransmissionTime (burst->GetSize (), modulationType);
       downlinkBursts->pop_front ();
@@ -1103,6 +1246,39 @@ BaseStationNetDevice::CreateUcd (void)
   return p;
 }
 
+// Added by Ramon
+Ptr<Packet>
+BaseStationNetDevice::CreateMbsMap (void)
+{
+  m_nrDlAllocations = 0;
+
+  DlMap Mbsmap;
+
+  std::list<std::pair<OfdmDlMapIe*, Ptr<PacketBurst> > > *downlinkBursts =
+      m_scheduler->GetDownlinkBursts ();
+
+  for (std::list<std::pair<OfdmDlMapIe*, Ptr<PacketBurst> > >::iterator iter =
+      downlinkBursts->begin (); iter != downlinkBursts->end (); ++iter)
+    {
+     Mbsmap.AddDlMapElement (*(iter->first));
+    }
+
+  OfdmDlMapIe MbsMapIeEnd;
+  // Modified by Ramon
+//   MbsMapIeEnd.SetCid (*CreateObject<ConnectionIdentifier> (0));
+  MbsMapIeEnd.SetCid (Cid::InitialRanging ());
+  MbsMapIeEnd.SetDiuc (OfdmDlBurstProfile::DIUC_END_OF_MAP);
+
+  Mbsmap.AddDlMapElement (MbsMapIeEnd);
+  m_nrDlAllocations = downlinkBursts->size ();
+
+  Ptr<Packet> p = Create<Packet> ();
+  p->AddHeader (Mbsmap);
+  p->AddHeader (ManagementMessageType (
+      ManagementMessageType::MESSAGE_TYPE_MBS_MAP));
+  return p;
+}
+
 void
 BaseStationNetDevice::SetDlBurstProfiles (Dcd *dcd)
 {
@@ -1220,6 +1396,27 @@ BaseStationNetDevice::RangingOppStart (void)
   m_rangingOppNumber++;
 
   NS_LOG_DEBUG ("Ranging TO " << (uint32_t) m_rangingOppNumber << ": " << Simulator::Now ().GetSeconds ());
+}
+
+// Added by Ramon
+void
+BaseStationNetDevice::Add(Ptr<BsCommandManager> manager)
+{
+  m_bsCommandManager = manager;
+}
+
+// Added by Ramon
+uint32_t
+BaseStationNetDevice::GetBsFrameNr(void)
+{
+  return m_BsFrameNr;
+}
+
+// Added by Ramon
+void
+BaseStationNetDevice::SetBsFrameNr(uint32_t nrFrames)
+{
+  m_BsFrameNr = nrFrames;
 }
 
 } // namespace ns3

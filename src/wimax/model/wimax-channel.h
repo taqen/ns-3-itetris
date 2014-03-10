@@ -47,6 +47,10 @@ public:
    * \param phy the physical layer to which the channel will be attached
    */
   void Attach (Ptr<WimaxPhy> phy);
+
+  // Added by Ramon
+  void DisAttach(Ptr<WimaxPhy> phy);
+
   /**
    * \return the number of attached devices
    */
@@ -68,6 +72,8 @@ public:
 
 private:
   virtual void DoAttach (Ptr<WimaxPhy> phy) = 0;
+  // Added by Ramon
+  virtual void DoDisAttach (Ptr<WimaxPhy> phy) = 0;
 
   virtual uint32_t DoGetNDevices (void) const = 0;
   virtual Ptr<NetDevice> DoGetDevice (uint32_t i) const = 0;

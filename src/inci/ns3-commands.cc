@@ -29,18 +29,18 @@ Ns3Commands::Ns3Commands ()
 
 }
 
-double
-Ns3Commands::RunCommandsUntilStep (double timeStep)
-{
-  Time t = Simulator::Next ();
-
-  while (t.GetSeconds () < timeStep)
-  {
-    Simulator::RunOneEvent ();
-    t = Simulator::Next ();
-  }
-
-  return t.GetSeconds();
-}
+//double
+//Ns3Commands::RunCommandsUntilStep (double timeStep)
+//{
+//  Time t = Simulator::Next ();
+//
+//  while (t.GetSeconds () < timeStep)
+//  {
+//    Simulator::RunOneEvent ();
+//    t = Simulator::Next ();
+//  }
+//
+//  return t.GetSeconds();
+//}
 
 }

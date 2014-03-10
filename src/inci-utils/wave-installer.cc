@@ -77,7 +77,7 @@ WaveInstaller::WaveInstaller ()
   wavePhyCch = YansWifiPhyHelper::Default ();
   wavePhySch = YansWifiPhyHelper::Default ();
 
-  wave.SetStandard (WIFI_PHY_STANDARD_80211_10Mhz);
+  wave.SetStandard (WIFI_PHY_STANDARD_80211_10MHZ);
   WifiMode defaultMode("wifi-6mbs-10Mhz");
   wave.SetRemoteStationManager ("ns3::McsTagWifiManager",
                                 "IsLowLatency",BooleanValue (true),

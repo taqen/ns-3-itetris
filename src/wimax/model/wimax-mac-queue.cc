@@ -132,6 +132,13 @@ WimaxMacQueue::GetMaxSize (void) const
   return m_maxSize;
 }
 
+// Added by Ramon
+uint32_t
+WimaxMacQueue::GetQueueSize (void) const
+{
+  return m_queue.size();
+}
+
 bool
 WimaxMacQueue::Enqueue (Ptr<Packet> packet, const MacHeaderType &hdrType,
                         const GenericMacHeader &hdr)
@@ -413,6 +420,14 @@ WimaxMacQueue::GetNBytes (void) const
 {
   return m_bytes;
 }
+
+// Added by Ramon
+void
+WimaxMacQueue::ResetNBytes (void)
+{
+  m_bytes = 0;
+}
+
 
 uint32_t WimaxMacQueue::GetQueueLengthWithMACOverhead (void)
 {
