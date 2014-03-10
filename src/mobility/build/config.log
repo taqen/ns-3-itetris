@@ -1,0 +1,10 @@
+# project  configured on Mon Mar 10 10:49:55 2014 by
+# waf 1.7.13 (abi 98, python 20706f0 on linux2)
+# using /home/kentux/mercurial/ns-3-itetris/src/mobility/../../waf configure
+#
+----------------------------------------
+Setting top to
+/home/kentux/mercurial/ns-3-itetris/src/mobility
+----------------------------------------
+Setting out to
+/home/kentux/mercurial/ns-3-itetris/src/mobility/build

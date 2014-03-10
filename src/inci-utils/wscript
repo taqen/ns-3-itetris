@@ -1,0 +1,76 @@
+## -*- Mode: python; py-indent-offset: 4; indent-tabs-mode: nil; coding: utf-8; -*-
+
+def build(bld):
+    module = bld.create_ns3_module('inci-utils')
+    module.source = [   
+
+        'wifi-installer.cc',
+        'wave-installer.cc',
+        'wifi-ip-installer.cc',
+        'comm-module-installer.cc',
+        'itetris-network-transport-installer.cc',
+        'mobility-model-installer.cc',
+        'iTETRISNodeManager.cc',
+        'packet-manager.cc',
+        'inci-packet.cc',
+        'inci-packet-list.cc',
+        'wave-vehicle-installer.cc',
+        'wave-rsu-installer.cc',
+        'wifi-bs-installer.cc',
+        'wifi-vehicle-installer.cc',
+        'ip-interface-list.cc',
+	'umts-installer.cc',
+	'umts-bs-installer.cc',
+	'umts-vehicle-installer.cc',
+	'dvbh-installer.cc',
+	'dvbh-bs-installer.cc',
+	'dvbh-vehicle-installer.cc',
+	'tmc-installer.cc',
+	'wimax-installer.cc',
+	'wimax-bs-installer.cc',
+	'wimax-vehicle-installer.cc',
+	'dvbh-helper.cc',
+	'mw-facilities-helper.cc',
+	'umts-helper.cc'
+        ]
+
+    headers = bld(features='ns3header')
+    headers.module = 'inci-utils'
+    headers.source = [      
+
+        'wifi-installer.h',
+        'wifi-ip-installer.h',
+        'wave-installer.h',
+        'comm-module-installer.h',
+        'itetris-network-transport-installer.h',
+        'mobility-model-installer.h',
+        'iTETRISNodeManager.h',
+        'packet-manager.h',
+        'configuration-manager-xml.h',
+        'inci-packet.h',   
+        'inci-packet-list.h',
+        'wave-vehicle-installer.h',
+        'wave-rsu-installer.h',
+        'itetris-types.h',
+        'wifi-bs-installer.h',
+        'wifi-vehicle-installer.h',
+        'ip-interface-list.h',
+	'umts-installer.h',
+	'umts-bs-installer.h',
+	'umts-vehicle-installer.h',
+	'dvbh-installer.h',
+	'dvbh-bs-installer.h',
+	'dvbh-vehicle-installer.h',
+	'tmc-installer.h',
+	'wimax-installer.h',
+	'wimax-bs-installer.h',
+	'wimax-vehicle-installer.h',
+	'dvbh-helper.h',
+	'mw-facilities-helper.h',
+	'umts-helper.h'
+        ]
+
+    if bld.env['ENABLE_LIBXML2']:
+        module.source.append ('configuration-manager-xml.cc')
+        module.uselib = 'LIBXML2'
+
