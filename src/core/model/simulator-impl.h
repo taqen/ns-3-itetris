@@ -51,6 +51,10 @@ public:
    * return true. Return false otherwise.
    */
   virtual bool IsFinished (void) const = 0;
+
+  //Porting old API for iTETRIS
+  virtual Time Next (void) const = 0;
+  virtual void RunOneEvent (void) = 0;
   /**
    * If an event invokes this method, it will be the last
    * event scheduled by the Simulator::Run method before

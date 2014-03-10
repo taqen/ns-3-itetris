@@ -72,11 +72,18 @@ public:
   /// calls Run() in the wrapped simulator
   void RunRealSimulator (void);
 
+  //Porting Old API for iTETRIS
+  virtual Time Next (void) const {return Time(0);}
+  virtual void RunOneEvent (void) {}
+
 protected:
   void DoDispose ();
   void NotifyConstructionCompleted (void);
 
 private:
+  //Porting Old API for iTETRIS
+  uint64_t NextTs (void) const {return 0;}
+
   Ptr<SimulatorImpl> GetSim ();
   Ptr<SimulatorImpl> m_simulator;
   ObjectFactory m_simulatorImplFactory;

@@ -63,10 +63,17 @@ public:
   virtual uint32_t GetSystemId (void) const; 
   virtual uint32_t GetContext (void) const;
 
+  //Porting Old API for iTETRIS
+  virtual Time Next (void) const;
+  virtual void RunOneEvent (void);
+
 private:
   virtual void DoDispose (void);
   void ProcessOneEvent (void);
   void ProcessEventsWithContext (void);
+
+  //Porting Old API for iTETRIS
+  uint64_t NextTs (void) const;
  
   struct EventWithContext {
     uint32_t context;

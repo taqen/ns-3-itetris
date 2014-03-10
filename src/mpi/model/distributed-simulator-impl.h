@@ -126,6 +126,8 @@ public:
   virtual uint32_t GetSystemId (void) const;
   virtual uint32_t GetContext (void) const;
 
+  //Porting Old API for iTETRIS
+  virtual void RunOneEvent (void) {}
 private:
   virtual void DoDispose (void);
   void CalculateLookAhead (void);
