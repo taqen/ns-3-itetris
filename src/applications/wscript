@@ -19,6 +19,15 @@ def build(bld):
         'model/udp-echo-server.cc',
         'model/v4ping.cc',
         'model/application-packet-probe.cc',
+        'model/C2C-IP-app.cc',
+        'model/CAMmanagement.cc',
+        'model/CAM-recv.cc',
+        'model/CAM-send.cc',
+        'model/DENM-app.cc',
+        'model/Dvbh-app.cc',
+        'model/iTETRIS-Application.cc',
+        'model/Umts-app.cc',
+        'model/wimax-app.cc',
         'helper/bulk-send-helper.cc',
         'helper/on-off-helper.cc',
         'helper/packet-sink-helper.cc',
@@ -27,6 +36,7 @@ def build(bld):
         'helper/udp-echo-helper.cc',
         'helper/v4ping-helper.cc',
         'helper/radvd-helper.cc',
+	'helper/Dvbh-App-helper.cc'
         ]
 
     applications_test = bld.create_ns3_module_test_library('applications')
@@ -53,6 +63,15 @@ def build(bld):
         'model/udp-echo-server.h',
         'model/v4ping.h',
         'model/application-packet-probe.h',
+        'model/C2C-IP-app.h',
+        'model/CAMmanagement.h',
+        'model/CAM-recv.h',
+        'model/CAM-send.h',
+        'model/DENM-app.h',
+        'model/Dvbh-app.h',
+        'model/iTETRIS-Application.h',
+        'model/Umts-app.h',
+        'model/wimax-app.h',
         'helper/bulk-send-helper.h',
         'helper/on-off-helper.h',
         'helper/packet-sink-helper.h',
@@ -61,6 +80,7 @@ def build(bld):
         'helper/udp-echo-helper.h',
         'helper/v4ping-helper.h',
         'helper/radvd-helper.h',
+	'helper/Dvbh-App-helper.h'
         ]
 
 #    bld.recurse('C2C-IP')
