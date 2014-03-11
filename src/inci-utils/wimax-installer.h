@@ -24,20 +24,22 @@
 
 #include "ns3/simulator.h"
 #include "ns3/node-container.h"
-#include "ns3/wimax-helper.h"
-#include "ns3/wimax-command-manager-helper.h"
 #include <libxml/encoding.h>
 #include <libxml/xmlreader.h>
 #include "ns3/ipv4-address-helper.h"
 #include "comm-module-installer.h"
 #include "ns3/C2C-IP-helper.h"
-#include "ns3/wimax-app-helper.h"
 #include "ns3/service-list-helper.h"
-#include "ns3/bs-command-manager-container.h"
-#include "ns3/ss-command-manager-container.h"
 
 namespace ns3
 {
+
+class BsCommandManagerContainer;
+class SsCommandManagerContainer;
+class WimaxCommandManagerHelper;
+class WimaxAppHelper;
+class WimaxHelper;
+class SimpleOfdmWimaxChannel;
 
 class WimaxInstaller : public CommModuleInstaller
 {

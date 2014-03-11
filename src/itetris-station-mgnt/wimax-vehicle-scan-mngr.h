@@ -25,12 +25,12 @@
 #include "ns3/simulator.h"
 #include "ns3/object.h"
 #include "ns3/vehicle-scan-mngr.h"
-#include "ns3/umts-net-device.h"
 
 namespace ns3
 {
 
 class SsCommandManager;
+class UmtsNetDevice;
 
 /**
  * The base class WimaxScanMngr implements the BaseStationScanMngr for the technology Wimax
