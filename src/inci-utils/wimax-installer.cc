@@ -30,6 +30,11 @@
 #include "ns3/C2C-IP-helper.h"
 #include "ns3/service-list-helper.h"
 #include "ip-interface-list.h"
+#include "ns3/bs-command-manager-container.h"
+#include "ns3/ss-command-manager-container.h"
+#include "ns3/wimax-command-manager-helper.h"
+#include "ns3/wimax-app-helper.h"
+#include "ns3/wimax-helper.h"
 
 NS_LOG_COMPONENT_DEFINE ("WimaxInstaller");
 

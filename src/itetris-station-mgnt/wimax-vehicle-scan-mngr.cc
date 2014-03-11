@@ -25,6 +25,7 @@
 #include "ns3/mobility-model.h"
 #include "ns3/ss-command-manager.h"
 #include "ns3/bs-command-manager.h"
+#include "ns3/umts-net-device.h"
 
 NS_LOG_COMPONENT_DEFINE ("WimaxVehicleScanMngr");
 

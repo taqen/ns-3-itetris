@@ -28,6 +28,13 @@
 #include "ns3/IPCIUFacilities.h"
 #include "ns3/log.h"
 #include "ns3/cost231-propagation-loss-model.h"
+#include "ns3/simple-ofdm-wimax-channel.h"
+#include "ns3/wimax-helper.h"
+#include "ns3/bs-command-manager-container.h"
+#include "ns3/ss-command-manager-container.h"
+#include "ns3/wimax-command-manager-helper.h"
+#include "ns3/service-list-helper.h"
+#include "ns3/wimax-app-helper.h"
 
 NS_LOG_COMPONENT_DEFINE ("WimaxBsInstaller");
 

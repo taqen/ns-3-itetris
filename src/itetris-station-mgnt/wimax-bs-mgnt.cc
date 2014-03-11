@@ -24,6 +24,7 @@
 #include "ns3/wimax-net-device.h"
 #include "ns3/addressing-support.h"
 #include "ns3/bs-command-manager.h"
+#include "ns3/wimax-net-device.h"
 
 NS_LOG_COMPONENT_DEFINE ("WimaxBsMgnt");
 
