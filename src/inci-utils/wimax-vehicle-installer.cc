@@ -29,7 +29,13 @@
 #include "ns3/vehicle-sta-mgnt.h"
 #include "ns3/c2c-facilities-helper.h"
 #include "ns3/wimax-version-type.h"
- 
+#include "ns3/wimax-helper.h"
+#include "ns3/ss-command-manager-container.h"
+#include "ns3/bs-command-manager-container.h"
+#include "ns3/wimax-command-manager-helper.h"
+#include "ns3/wimax-app-helper.h"
+#include "ns3/service-list-helper.h"
+
 NS_LOG_COMPONENT_DEFINE ("WimaxVehicleInstaller");
 
 namespace ns3
