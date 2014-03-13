@@ -23,7 +23,6 @@
 #define WIMAX_BS_MGNT_H
 
 #include "ns3/simulator.h"
-#include "ns3/wimax-net-device.h"
 #include "ns3/object.h"
 #include "ns3/ip-base-sta-mgnt.h"
 
@@ -31,6 +30,7 @@ namespace ns3
 {
 
 class BsCommandManager;
+class WimaxNetDevice;
 
 /**
  * The base class WimaxBsMgnt implements the IpBaseStaMgnfor the technology Wimax
