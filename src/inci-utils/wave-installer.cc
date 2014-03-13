@@ -78,13 +78,13 @@ WaveInstaller::WaveInstaller ()
   wavePhySch = YansWifiPhyHelper::Default ();
 
   wave.SetStandard (WIFI_PHY_STANDARD_80211_10MHZ);
-  WifiMode defaultMode("wifi-6mbs-10Mhz");
+  WifiMode defaultMode("OfdmRate6MbpsBW10MHz");
   wave.SetRemoteStationManager ("ns3::McsTagWifiManager",
                                 "IsLowLatency",BooleanValue (true),
                                 "NonUnicastMode", WifiModeValue (defaultMode));
 
   waveMac = QosWifiMacHelper::Default ();
-  waveMac.SetType ("ns3::QadhocWifiMac");
+  waveMac.SetType ("ns3::AdhocWifiMac");
 
 } 
 
