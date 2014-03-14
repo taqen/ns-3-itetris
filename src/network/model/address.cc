@@ -248,16 +248,16 @@ std::ostream& operator<< (std::ostream& os, const Address & address)
   return os;
 }
 
-static uint8_t
-AsInt (std::string v)
-{
-  NS_LOG_FUNCTION_NOARGS ();
-  std::istringstream iss;
-  iss.str (v);
-  uint8_t retval;
-  iss >> std::hex >> retval >> std::dec;
-  return retval;
-}
+//static uint8_t
+//AsInt (std::string v)
+//{
+//  NS_LOG_FUNCTION_NOARGS ();
+//  std::istringstream iss;
+// iss.str (v);
+//  uint8_t retval;
+//  iss >> std::hex >> retval >> std::dec;
+//  return retval;
+//}
 
 std::istream& operator>> (std::istream& is, Address & address)
 {
@@ -269,8 +269,8 @@ std::istream& operator>> (std::istream& is, Address & address)
   std::string type = v.substr (0, firstDash-0);
   std::string len = v.substr (firstDash+1, secondDash-(firstDash+1));
 
-  address.m_type = AsInt (type);
-  address.m_len = AsInt (len);
+  address.m_type = std::strtoul (type.c_str(), 0, 16);
+  address.m_len = std::strtoul (len.c_str(), 0, 16);
   NS_ASSERT (address.m_len <= Address::MAX_SIZE);
 
   std::string::size_type col = secondDash + 1;
@@ -282,13 +282,13 @@ std::istream& operator>> (std::istream& is, Address & address)
       if (next == std::string::npos)
         {
           tmp = v.substr (col, v.size ()-col);
-          address.m_data[i] = AsInt (tmp);
+          address.m_data[i] = std::strtoul (tmp.c_str(), 0, 16);
           break;
         }
       else
         {
           tmp = v.substr (col, next-col);
-          address.m_data[i] = AsInt (tmp);
+          address.m_data[i] = std::strtoul (tmp.c_str(), 0, 16);
           col = next + 1;
         }
     }
