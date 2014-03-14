@@ -78,12 +78,12 @@ C2CIPApp::GetTypeId (void)
     		   UintegerValue (0),
     		   MakeUintegerAccessor (&C2CIPApp::m_portIP),     
     		   MakeUintegerChecker<uint16_t> ())
-    .AddAttribute ("SocketFactorytype1", "The type of the socket factory 1 to use.",   
-               TypeIdValue (),
+    .AddAttribute ("SocketFactorytype1", "The type of the socket factory 1 to use.",
+               TypeIdValue (c2cl4TSocketFactory::GetTypeId ()),
                MakeTypeIdAccessor (&C2CIPApp::m_firstSocketfactory),
                MakeTypeIdChecker ())
     .AddAttribute ("SocketFactorytype2", "The type of the socket factory 2 to use.",
-               TypeIdValue (),
+               TypeIdValue (c2cl4TSocketFactory::GetTypeId ()),
                MakeTypeIdAccessor (&C2CIPApp::m_secondSocketfactory),
                MakeTypeIdChecker ())
 

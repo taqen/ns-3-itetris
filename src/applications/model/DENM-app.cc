@@ -73,7 +73,7 @@ DENMApp::GetTypeId (void)
     		   MakeUintegerAccessor (&DENMApp::m_portC2C),     
     		   MakeUintegerChecker<uint16_t> ())
     .AddAttribute ("SocketFactorytype1", "The type of the socket factory 1 to use.",   
-               TypeIdValue (),
+               TypeIdValue (SocketFactoryc2c::GetTypeId()),
                MakeTypeIdAccessor (&DENMApp::m_C2CSocketfactory),
                MakeTypeIdChecker ())
     ;
