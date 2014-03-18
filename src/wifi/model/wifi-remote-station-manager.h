@@ -643,6 +643,8 @@ public:
    * \return the short retry limit of the the station
    */
   uint32_t GetShortRetryCount (const WifiRemoteStation *station) const;
+
+  Ptr<const Packet> m_packet;
 private:
   /**
    * \param station the station that we need to communicate

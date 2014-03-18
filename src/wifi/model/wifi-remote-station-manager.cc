@@ -573,6 +573,7 @@ WifiRemoteStationManager::GetDataTxVector (Mac48Address address, const WifiMacHe
       (void) found;
       return datatag.GetDataTxVector ();
     }
+  m_packet = packet->Copy();
   return DoGetDataTxVector (Lookup (address, header), fullPacketSize);
 }
 WifiTxVector
