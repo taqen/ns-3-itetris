@@ -20,7 +20,7 @@
 #include "ns3/inci-module.h"
 #include "ns3/mobility-module.h"
 #include "ns3/inci-utils-module.h" 
-#include "ns3/config-store.h"
+#include "ns3/config-store-module.h"
 #include <exception>
 
 using namespace ns3;
