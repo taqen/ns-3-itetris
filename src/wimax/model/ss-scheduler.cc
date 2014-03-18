@@ -190,23 +190,6 @@ SSScheduler::SelectConnection (void)
         }
     }
 
-  NS_LOG_INFO ("SS Scheduler: Selecting connection...");
-  if (m_ss->GetInitialRangingConnection ()->HasPackets ())
-    {
-      NS_LOG_INFO ("Return GetInitialRangingConnection");
-      return m_ss->GetInitialRangingConnection ();
-    }
-  if (m_ss->GetBasicConnection ()->HasPackets ())
-    {
-      NS_LOG_INFO ("Return GetBasicConnection");
-      return m_ss->GetBasicConnection ();
-    }
-  if (m_ss->GetPrimaryConnection ()->HasPackets ())
-    {
-      NS_LOG_INFO ("Return GetPrimaryConnection");
-      return m_ss->GetPrimaryConnection ();
-    }
-
   serviceFlows = m_ss->GetServiceFlowManager ()->GetServiceFlows (ServiceFlow::SF_TYPE_UGS);
   for (iter = serviceFlows.begin (); iter != serviceFlows.end (); ++iter)
     {
