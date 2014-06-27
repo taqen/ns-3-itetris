@@ -50,19 +50,29 @@ if (argc > 4 /*&& !inciPort.empty() && !fileConfTechnologies.empty() && !fileGen
 
   cmd.Parse (argc, argv);
 
-  LogComponentEnable ("ConfigurationManagerXml",LOG_LEVEL_DEBUG);
-  LogComponentEnable ("WaveInstaller",LOG_LEVEL_DEBUG);
+  LogComponentEnable ("ConfigurationManagerXml",LOG_LEVEL_ALL);
+  LogComponentEnable ("WaveInstaller",LOG_LEVEL_ALL);
+  LogComponentEnable ("WaveRsuInstaller",LOG_LEVEL_ALL);
   LogComponentEnable ("RsuStaMgnt",LOG_LEVEL_LOGIC);
- // LogComponentEnable ("InciPacketList",LOG_LEVEL_DEBUG);
+  LogComponentEnable ("InciPacketList",LOG_LEVEL_ALL);
+  LogComponentEnable ("iTETRISApplication",LOG_LEVEL_ALL);
+  LogComponentEnable ("CAMmanage",LOG_LEVEL_ALL);
+  LogComponentEnable ("c2cl4TSocketImpl",LOG_LEVEL_ALL);
+  LogComponentEnable ("C2CIPApp",LOG_LEVEL_ALL);
+  LogComponentEnable ("iTETRISns3Facilities",LOG_LEVEL_ALL);
+  LogComponentEnable ("PacketManager",LOG_LEVEL_ALL);
+  LogComponentEnable ("c2cTransport",LOG_LEVEL_ALL);
+//  LogComponentEnable ("ItetrisMobilityModel",LOG_LEVEL_ALL);
+  LogComponentEnableAll (LOG_PREFIX_ALL);
 
  
-  if (fileGeneralParameters != "")
-    {
-      Config::SetDefault ("ns3::ConfigStore::Filename", StringValue (fileGeneralParameters));
-      Config::SetDefault ("ns3::ConfigStore::Mode", StringValue ("Load"));
-      ConfigStore config;
-      config.ConfigureDefaults ();
-    }
+//  if (fileGeneralParameters != "")
+//    {
+//      Config::SetDefault ("ns3::ConfigStore::Filename", StringValue (fileGeneralParameters));
+//      Config::SetDefault ("ns3::ConfigStore::Mode", StringValue ("Load"));
+//      ConfigStore config;
+//      config.ConfigureDefaults ();
+//    }
 
   if (fileConfTechnologies == "")
     {
