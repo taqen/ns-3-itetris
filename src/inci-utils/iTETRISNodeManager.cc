@@ -51,6 +51,7 @@ uint32_t iTETRISNodeManager::CreateItetrisNode (Vector position)
 uint32_t iTETRISNodeManager::CreateItetrisNode (const Vector &position, const float &speed, const float & heading, const std::string &laneId)
 {
   CreateItetrisNode ();
+  uint32_t N = m_iTETRISNodes.GetN();
   Ptr<Node> node = m_iTETRISNodes.Get(m_iTETRISNodes.GetN() - 1);
   Ptr<ItetrisMobilityModel> itetrisMobModel = node->GetObject<ItetrisMobilityModel> ();
   if (itetrisMobModel == NULL)
@@ -168,7 +169,7 @@ iTETRISNodeManager::UpdateNodePosition (uint32_t nodeId, Vector position)
 void
 iTETRISNodeManager::UpdateNodePosition (uint32_t nodeId, const Vector &position, const float &speed, const float & heading, const std::string &laneId) 
 {
-  Ptr<Node> node = m_iTETRISNodes.Get(nodeId);  
+  Ptr<Node> node = m_iTETRISNodes.Get(nodeId - 1);
   Ptr<ItetrisMobilityModel> itetrisMobModel = node->GetObject<ItetrisMobilityModel> ();  
   if (itetrisMobModel == NULL)
     {
@@ -183,9 +184,10 @@ Ptr<Node>
 iTETRISNodeManager::GetItetrisNode (uint32_t nodeId)
 {
   Ptr<Node> node = NULL;
-  if ( (nodeId <= (m_iTETRISNodes.GetN () - 1)) && (m_iTETRISNodes.GetN () > 0) )
+  uint32_t N = m_iTETRISNodes.GetN ();
+  if ( (nodeId <= (m_iTETRISNodes.GetN ())) && (m_iTETRISNodes.GetN () > 0) )
     {
-      node = m_iTETRISNodes.Get(nodeId); 
+      node = m_iTETRISNodes.Get(nodeId - 1); //TODO Verify this, apparently there is a bug in the old code
     }
   return (node);
 }

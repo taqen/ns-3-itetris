@@ -50,8 +50,8 @@ typedef struct {
 } IpStationTuple;
 typedef std::map<std::string, Ptr<NetDevice> > C2cNetDeviceList;//modified by Fatma
 typedef std::map<std::string, IpStationTuple > IpNetDeviceList;//modified by Fatma
-    typedef std::map <std::string, Ptr<const IpBaseStation>  > IpBaseStationList;
-    typedef std::vector <Ptr<RoadSideUnit> > RoadSideUnitList;
+typedef std::map <std::string, Ptr<const IpBaseStation>  > IpBaseStationList;
+typedef std::vector <Ptr<RoadSideUnit> > RoadSideUnitList;
 
 class VehicleStaMgnt : public Object
 {
