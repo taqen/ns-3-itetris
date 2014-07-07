@@ -18,6 +18,8 @@ def build(bld):
 	'dvbh-bs-mgnt.cc',
 	'wimax-bs-mgnt.cc',
 	'wimax-vehicle-scan-mngr.cc',
+	'lte-vehicle-scan-mngr.cc',
+	'lte-bs-mgnt.cc'
         ]
 
     headers = bld(features='ns3header')
@@ -38,5 +40,7 @@ def build(bld):
 	'dvbh-vehicle-scan-mngr.h',
         'wimax-bs-mgnt.h',
 	'wimax-vehicle-scan-mngr.h',
+	'lte-vehicle-scan-mngr.h',
+	'lte-bs-mgnt.h'
         ]
 
