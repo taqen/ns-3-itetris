@@ -68,12 +68,13 @@ if (argc > 4 /*&& !inciPort.empty() && !fileConfTechnologies.empty() && !fileGen
  
 //  if (fileGeneralParameters != "")
 //    {
-//      Config::SetDefault ("ns3::ConfigStore::Filename", StringValue (fileGeneralParameters));
-//      Config::SetDefault ("ns3::ConfigStore::Mode", StringValue ("Load"));
+//      Config::SetDefault ("ns3::ConfigStore::Filename", StringValue ("configGenerals.txt"));
+//      Config::SetDefault ("ns3::ConfigStore::Mode", StringValue ("Save"));
 //      ConfigStore config;
 //      config.ConfigureDefaults ();
 //    }
 
+  Config::SetDefault("ns3::WifiMacQueue::MaxDelay", TimeValue(Seconds (10.0)));
   if (fileConfTechnologies == "")
     {
       fileConfTechnologies = "scratch/configTechnologies-ics.xml";

@@ -207,18 +207,18 @@ EpcUeNas::Send (Ptr<Packet> packet)
     {
     case ACTIVE:
       {
-        uint32_t id = m_tftClassifier.Classify (packet, EpcTft::UPLINK);
-        NS_ASSERT ((id & 0xFFFFFF00) == 0);
-        uint8_t bid = (uint8_t) (id & 0x000000FF);
-        if (bid == 0)
-          {
-            return false;
-          }
-        else
-          {
-            m_asSapProvider->SendData (packet, bid); 
+//        uint32_t id = m_tftClassifier.Classify (packet, EpcTft::UPLINK);
+//        NS_ASSERT ((id & 0xFFFFFF00) == 0);
+//        uint8_t bid = (uint8_t) (id & 0x000000FF);
+//        if (bid == 0)
+//          {
+//            return false;
+//          }
+//        else
+//          {
+            m_asSapProvider->SendData (packet, 1);
             return true;
-          }
+//          }
       }
       break;
 

@@ -30,6 +30,7 @@ enum NetDeviceType {
   UMTS = 3,
   WIMAX = 4,
   DVB = 5,
+  LTE_DEVICE = 6,
   DEV_UNDEF
 };
 

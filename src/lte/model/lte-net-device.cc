@@ -35,6 +35,8 @@
 #include <ns3/lte-radio-bearer-tag.h>
 #include <ns3/ipv4-l3-protocol.h>
 #include <ns3/log.h>
+#include "ns3/c2c-l3-protocol.h"
+//#include "ns3/c2c-tag.h"
 
 NS_LOG_COMPONENT_DEFINE ("LteNetDevice");
 
@@ -284,7 +286,11 @@ void
 LteNetDevice::Receive (Ptr<Packet> p)
 {
   NS_LOG_FUNCTION (this << p);
-  m_rxCallback (this, p, Ipv4L3Protocol::PROT_NUMBER, Address ());
+//  c2cTag tag;
+//  if(p->PeekPacketTag(tag))
+    m_rxCallback (this, p, c2cL3Protocol::PROT_NUMBER, Address ());
+//  else
+//    m_rxCallback (this, p, Ipv4L3Protocol::PROT_NUMBER, Address ());
 }
 
 

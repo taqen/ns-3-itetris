@@ -380,7 +380,7 @@ Ns3Server::CreateNode (void)
 	vector<string> listOfCommModules = myInputStorage.readStringList();
 	vector<string>::iterator moduleIt;
 
-	int32_t nodeId=my_nodeManagerPtr->CreateItetrisNode (pos);
+	uint32_t nodeId=my_nodeManagerPtr->CreateItetrisNode (pos);
 
 	stringstream log;
 

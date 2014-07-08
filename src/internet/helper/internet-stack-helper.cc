@@ -248,8 +248,8 @@ InternetStackHelper::InternetStackHelper ()
     m_routingv6 (0),
     m_routingc2c (0),                                                   //iTETRIS
     m_ipv4Enabled (true),
-    m_ipv6Enabled (true),
-    m_c2cEnabled (true),                                                 //iTETRIS
+    m_ipv6Enabled (false),
+    m_c2cEnabled (false),                                                 //iTETRIS
     m_ipv4ArpJitterEnabled (true),
     m_ipv6NsRsJitterEnabled (true)
 
@@ -321,10 +321,10 @@ InternetStackHelper::Reset (void)
   delete m_routingc2c;                             //iTETRIS
   m_routingc2c = 0;                               //iTETRIS
   m_ipv4Enabled = true;
-  m_ipv6Enabled = true;
+  m_ipv6Enabled = false;
   m_ipv4ArpJitterEnabled = true;
   m_ipv6NsRsJitterEnabled = true;
-  m_c2cEnabled = true;                             //iTETRIS
+  m_c2cEnabled = false;                             //iTETRIS
   Initialize ();
 }
 
@@ -468,7 +468,7 @@ InternetStackHelper::Install (Ptr<Node> node) const
 
       if (node->GetObject<Ipv4> () != 0)
         {
-          NS_FATAL_ERROR ("InternetStackHelper::Install (): Aggregating " 
+          NS_LOG_ERROR ("InternetStackHelper::Install (): Aggregating "
                           "an InternetStack to a node with an existing Ipv4 object");
           return;
         }
