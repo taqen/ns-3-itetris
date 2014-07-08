@@ -47,6 +47,7 @@ LteBsInstaller::DoInstall (NodeContainer container)
   NS_LOG_INFO ("*** LteBsInstaller ***");
   
   NetDeviceContainer devices = lte->InstallEnbDevice(container);
+  m_ipAddressHelper.Assign (devices);
 
   enbNodes.Add(container);
 

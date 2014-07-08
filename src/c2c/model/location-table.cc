@@ -101,6 +101,7 @@ LocationTable::ScheduleCleanTable ()
 void
 LocationTable::AddOwnEntry ()
 {
+  NS_ASSERT (m_node);
   struct c2cCommonHeader::LongPositionVector vector;
   if (m_node != 0)
   {

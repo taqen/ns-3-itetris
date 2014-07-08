@@ -89,10 +89,8 @@ LteInstaller::~LteInstaller()
 void
 LteInstaller::Install (NodeContainer container)
 {
-//  lte->SetEpcHelper(epcHelper);
   NetDeviceContainer netDevices = DoInstall(container);
-//  NetDeviceContainer netDevices = lte->InstallUeDevice (container);
-  m_ipAddressHelper.Assign (netDevices);
+  AddInterfacesToIpInterfaceList(container);
   inf.Assign(LTE_DEVICE, netDevices);
 
 }

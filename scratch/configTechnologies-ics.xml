@@ -15,5 +15,6 @@
       <installer type="ns3::TmcInstaller" name="TMC" default="false" />
       <installer type="ns3::ItetrisNetworkTransportInstaller" name="NetTrans" default="true" />
       <installer type="ns3::MobilityModelInstaller" name="Mobility" default="true" />
+      <installer type="ns3::LteVehicleInstaller" name="LteVehicle" file="confLteVehicle.xml" default="false" />
   </installers>
 </ns3Configuration>

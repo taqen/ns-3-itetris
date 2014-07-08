@@ -148,8 +148,8 @@ LteUePhy::LteUePhy (Ptr<LteSpectrumPhy> dlPhy, Ptr<LteSpectrumPhy> ulPhy)
   m_ueCphySapProvider = new MemberLteUeCphySapProvider<LteUePhy> (this);
   m_macChTtiDelay = UL_PUSCH_TTIS_DELAY;
 
-  NS_ASSERT_MSG (Simulator::Now ().GetNanoSeconds () == 0,
-                 "Cannot create UE devices after simulation started");
+//  NS_ASSERT_MSG (Simulator::Now ().GetNanoSeconds () == 0,
+//                 "Cannot create UE devices after simulation started");
   Simulator::ScheduleNow (&LteUePhy::SubframeIndication, this, 1, 1);
   Simulator::Schedule (m_ueMeasurementsFilterPeriod, &LteUePhy::ReportUeMeasurements, this);
 

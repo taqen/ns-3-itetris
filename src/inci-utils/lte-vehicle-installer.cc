@@ -44,6 +44,7 @@ LteVehicleInstaller::DoInstall (NodeContainer container)
   NS_LOG_INFO ("*** LteVehicleInstaller ***");
   
   NetDeviceContainer devices = lte->InstallUeDevice(container);
+  m_ipAddressHelper.Assign (devices);
   ueNodes.Add(container);
 
    uint32_t index = 0;
