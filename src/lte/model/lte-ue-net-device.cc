@@ -253,7 +253,7 @@ bool
 LteUeNetDevice::Send (Ptr<Packet> packet, const Address& dest, uint16_t protocolNumber)
 {
   NS_LOG_FUNCTION (this << dest << protocolNumber);
-  if (protocolNumber != Ipv4L3Protocol::PROT_NUMBER && protocolNumber != 0x0707)
+  if (protocolNumber != Ipv4L3Protocol::PROT_NUMBER && protocolNumber != 0x0707) //TODO Ugly!
     {
       NS_LOG_INFO("unsupported protocol " << protocolNumber << ", only IPv4 is supported");
       return true;
