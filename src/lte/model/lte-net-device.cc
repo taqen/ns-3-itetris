@@ -36,7 +36,6 @@
 #include <ns3/ipv4-l3-protocol.h>
 #include <ns3/log.h>
 #include "ns3/c2c-l3-protocol.h"
-//#include "ns3/c2c-tag.h"
 
 NS_LOG_COMPONENT_DEFINE ("LteNetDevice");
 
@@ -286,11 +285,28 @@ void
 LteNetDevice::Receive (Ptr<Packet> p)
 {
   NS_LOG_FUNCTION (this << p);
-//  c2cTag tag;
-//  if(p->PeekPacketTag(tag))
-    m_rxCallback (this, p, c2cL3Protocol::PROT_NUMBER, Address ());
-//  else
-//    m_rxCallback (this, p, Ipv4L3Protocol::PROT_NUMBER, Address ());
+
+  Ptr<Packet> copy = p->Copy();
+  PacketMetadata::ItemIterator iterator = copy->BeginItem ();
+  PacketMetadata::Item item;
+  while  (iterator.HasNext ())
+  {
+	  item = iterator.Next ();
+	  if (item.tid.GetName() == "ns3::Ipv4Header")
+	  {
+		  NS_LOG_DEBUG("Ipv4 header found");
+		  m_rxCallback (this, p, Ipv4L3Protocol::PROT_NUMBER, Address ());
+		  break;
+	  }
+	  if (item.tid.GetName() == "ns3::c2cCommonHeader")
+	  {
+		  NS_LOG_DEBUG("c2c common header found");
+		  m_rxCallback (this, p, c2cL3Protocol::PROT_NUMBER, Address ());
+		  break;
+	  }
+  }
+
+  NS_FATAL_ERROR("An ipv4 or c2c header is expected!");
 }
 
 
