@@ -334,7 +334,7 @@ bool
 LteEnbNetDevice::Send (Ptr<Packet> packet, const Address& dest, uint16_t protocolNumber)
 {
   NS_LOG_FUNCTION (this << packet   << dest << protocolNumber);
-  NS_ASSERT_MSG (protocolNumber == Ipv4L3Protocol::PROT_NUMBER, "unsupported protocol " << protocolNumber << ", only IPv4 is supported");
+  NS_ASSERT_MSG (protocolNumber == Ipv4L3Protocol::PROT_NUMBER || protocolNumber == 0x0707, "unsupported protocol " << protocolNumber << ", only IPv4 is supported");//TODO: Ugly 0x0707
   return m_rrc->SendData (packet);
 }
 

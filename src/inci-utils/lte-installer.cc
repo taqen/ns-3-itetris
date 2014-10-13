@@ -30,6 +30,7 @@
 #include "ns3/vehicle-scan-mngr.h"
 //#include "ns3/lte-bs-mgnt.h"
 #include "ns3/C2C-IP-helper.h"
+
 //#include "ns3/Lte-App-helper.h"
 #include "ip-interface-list.h"
 #include "ns3/service-list-helper.h"
@@ -167,10 +168,10 @@ LteInstaller::Configure (std::string filename)
         }
 
         // Applications
-//      if (std::string ((char*)tag) == "application")
-//        {
-//          ProcessApplicationInstall (reader);
-//        }
+      if (std::string ((char*)tag) == "application")
+        {
+          ProcessApplicationInstall (reader);
+        }
 
       rc = xmlTextReaderRead (reader);
     }
@@ -202,124 +203,109 @@ LteInstaller::AddInterfacesToIpInterfaceList (NodeContainer container)
 
 //TODO Support for applications
 //void
-//LteInstaller::ProcessApplicationInstall (xmlTextReaderPtr reader)
-//{
-//  int rc;
-//  std::string appType, appName;
-//
-//  rc = xmlTextReaderRead (reader);
-//  while (rc > 0)
-//    {
-//      const xmlChar *tag = xmlTextReaderConstName(reader);
-//      if (tag == 0)
-//	{
-//	  NS_FATAL_ERROR ("Invalid value");
-//	}
-//
-//      NS_LOG_DEBUG ("Tag read in ConfigurationFile=" << tag);
+void
+LteInstaller::ProcessApplicationInstall (xmlTextReaderPtr reader)
+{
+  int rc;
+  std::string appType, appName;
+  rc = xmlTextReaderRead (reader);
+  while (rc > 0)
+    {
+      const xmlChar *tag = xmlTextReaderConstName(reader);
+      if (tag == 0)
+        {
+          NS_FATAL_ERROR ("Invalid value");
+        }
 
-//       if (std::string ((char*)tag) == "LteApp")
-//	{
-//          appType = "LteApp";
-//	  xmlChar *name = xmlTextReaderGetAttribute (reader, BAD_CAST "itetrisName");
-//
-//	  if (name != 0)
-//	    {
-//	      appName = std::string ((char*)name);
-//	      m_lteAppHelper = new LTEAppHelper();
-//	      NS_LOG_DEBUG ("LTE Application itetrisName = "<<std::string ((char*)name));
-//	    }
-//	  xmlChar *attribute = xmlTextReaderGetAttribute (reader, BAD_CAST "attribute");
-//	  if (attribute != 0)
-//	    {
-//	      xmlChar *value = xmlTextReaderGetAttribute (reader, BAD_CAST "value");
-//	      if (value != 0)
-//		{
-//		  if (m_lteAppHelper)
-//		    {
-//		      m_lteAppHelper->SetAttribute((char*)attribute,StringValue((char*)value));
-//		      NS_LOG_DEBUG ("LTEApp attribute=" << attribute <<" value=" << value);
-//		    }
-//
-//		    if(std::string((char*)value)=="BROADCAST"||std::string((char*)value)=="MULTICAST")
-//		    {
-//		      xmlChar *ip = xmlTextReaderGetAttribute (reader, BAD_CAST "ip");
-//		      if (ip != 0)
-//			{
-//			  if (m_lteAppHelper)
-//			    {
-//			      m_lteAppHelper->SetAttribute((char*)attribute,StringValue((char*)ip));
-//			      NS_LOG_DEBUG ("LTEApp attribute=" << attribute <<" value=" << ip);
-//			    }
-//
-//
-//			}
-//			xmlFree (ip);
-//		    }
-//
-//		}
-//
-//
-//	      xmlFree (value);
-//	    }
-//	  xmlFree (name);
-//	  xmlFree (attribute);
-//	}
-//       else if (std::string ((char*)tag) == "C2CIP")
-// 	{
-//           appType = "C2CIP";
-// 	  
-// 	  xmlChar *name = xmlTextReaderGetAttribute (reader, BAD_CAST "itetrisName");
-// 	  if (name != 0)
-// 	    {
-// 	      appName = std::string ((char*)name);	      
-// 	      m_c2cIpHelper = new C2CIPHelper("ns3::c2cl4TSocketFactory", "ns3::UdpSocketFactory");
-// 	      NS_LOG_DEBUG ("Application itetrisName="<<std::string ((char*)name)); 
-// 	    }
-// 	  xmlChar *attribute = xmlTextReaderGetAttribute (reader, BAD_CAST "attribute");
-// 	  if (attribute != 0)
-// 	    {
-// 	      xmlChar *value = xmlTextReaderGetAttribute (reader, BAD_CAST "value");
-// 	      if (value != 0)
-// 		{
-// 		  if (m_c2cIpHelper)
-// 		    {
-// 		      m_c2cIpHelper->SetAttribute((char*)attribute,StringValue((char*)value));
-// 		      NS_LOG_DEBUG ("C2CIP attribute=" << attribute <<" value=" << value); 
-// 		    }
-// 		}
-// 	      xmlFree (value);
-// 	    }
-// 	  xmlFree (name);
-// 	  xmlFree (attribute);
-// 	}
-//      else
-//        if (std::string ((char*)tag) == "application")
-//	{
-////           if (appType=="LteApp")
-////             {
-//	      if(m_nodeType=="NodeUE")
-//	      {
-//		appName="LTE-"+appName;
-//	      }
-//	      m_servListHelper->Add (m_lteAppHelper, appName);
-//	      NS_LOG_DEBUG ("LteApp application with itetrisName="<<appName<<" has been added to the ServiceListHelper");
-//              m_lteAppHelper = NULL;
-//// 	    }
-//// 	    else if (appType=="C2CIP")
-////             {
-//// 	      m_servListHelper->Add (m_c2cIpHelper, appName);
-//// 	      NS_LOG_DEBUG ("C2CIP application with itetrisName="<<appName<<" has been added to the ServiceListHelper");
-////               m_c2cIpHelper = NULL;
-//// 	    }
-////           else
-//// 	    {
-//// 	      NS_FATAL_ERROR ("Type of application not valid ");
-//// 	    }
-//	  return;
-//	}
-//      rc = xmlTextReaderRead (reader);
-//    }
-//}
+      NS_LOG_DEBUG ("Tag read in ConfigurationFile=" << tag);
+
+      // CAMmanage application
+      if (std::string ((char*)tag) == "CAMmanage")
+        {
+          appType = "CAMmanage";
+          xmlChar *name = xmlTextReaderGetAttribute (reader, BAD_CAST "itetrisName");
+          if (name != 0)
+            {
+              m_camHelper = new CAMmanageHelper("ns3::c2cl4TSocketFactory");
+              appName = std::string ((char*)name);
+              NS_LOG_DEBUG ("Application itetrisName="<<std::string ((char*)name));
+            }
+          xmlChar *attribute = xmlTextReaderGetAttribute (reader, BAD_CAST "attribute");
+          if (attribute != 0)
+            {
+              xmlChar *value = xmlTextReaderGetAttribute (reader, BAD_CAST "value");
+              if (value != 0)
+                {
+                  if (m_camHelper)
+                    {
+                      m_camHelper->SetAttribute((char*)attribute,StringValue((char*)value));
+                      NS_LOG_DEBUG ("CAMmanage attribute=" << attribute <<" value=" << value);
+                    }
+                }
+              xmlFree (value);
+            }
+          xmlFree (name);
+          xmlFree (attribute);
+        }
+
+      // C2CIP application
+      else if (std::string ((char*)tag) == "C2CIP")
+        {
+          appType = "C2CIP";
+          xmlChar *name = xmlTextReaderGetAttribute (reader, BAD_CAST "itetrisName");
+          if (name != 0)
+            {
+              appName = std::string ((char*)name);
+              m_c2cIpHelper = new C2CIPHelper("ns3::c2cl4TSocketFactory", "ns3::UdpSocketFactory");
+              NS_LOG_DEBUG ("Application itetrisName="<<std::string ((char*)name));
+            }
+          xmlChar *attribute = xmlTextReaderGetAttribute (reader, BAD_CAST "attribute");
+          if (attribute != 0)
+            {
+              xmlChar *value = xmlTextReaderGetAttribute (reader, BAD_CAST "value");
+              if (value != 0)
+                {
+                  if (m_c2cIpHelper)
+                    {
+                      m_c2cIpHelper->SetAttribute((char*)attribute,StringValue((char*)value));
+                      NS_LOG_DEBUG ("C2CIP attribute=" << attribute <<" value=" << value);
+                    }
+                }
+              xmlFree (value);
+            }
+          xmlFree (name);
+          xmlFree (attribute);
+        }
+      else if (std::string ((char*)tag) == "application")
+        {
+          if (appType == "CAMmanage")
+            {
+              if (appName != "CAM")
+                {
+                  m_servListHelper->Add (m_camHelper, appName);
+                  NS_LOG_DEBUG ("CAMmanage application with itetrisName="<<appName<<" has been added to the ServiceListHelper");
+                  m_camHelper = NULL;
+                }
+              else
+                {
+                  NS_FATAL_ERROR ("WaveInstaller::ProcessApplicationInstall: The name 'CAM' cannot be assigned to an Application (it is reserved).");
+                }
+            }
+          else if ("C2CIP")
+            {
+              m_servListHelper->Add (m_c2cIpHelper, appName);
+              NS_LOG_DEBUG ("C2CIP application with itetrisName="<<appName<<" has been added to the ServiceListHelper");
+              m_c2cIpHelper = NULL;
+            }
+          else
+            {
+              NS_FATAL_ERROR ("Type of application not valid ");
+            }
+          return;
+        }
+      rc = xmlTextReaderRead (reader);
+    }
+}
+
 
 } // namespace ns3

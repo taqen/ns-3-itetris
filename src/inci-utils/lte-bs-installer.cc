@@ -72,15 +72,22 @@ LteBsInstaller::DoInstall (NodeContainer container)
         
       // Check if the vehicle has the Facilties already installed
 //     Ptr<iTETRISns3Facilities> facilities = (*i)->GetObject <iTETRISns3Facilities> ();
-    Ptr<IPCIUFacilities> facilities = (*i)->GetObject <IPCIUFacilities> ();
-    if (facilities == NULL)
-      {
-	IPCIUFacilitiesHelper facilitiesHelper;
-	facilitiesHelper.SetServiceListHelper (m_servListHelper);
-	facilitiesHelper.Install (*i);
-	NS_LOG_INFO ("The object IPCIUFacilities has been installed in the vehicle");
-      }
-      
+      Ptr<iTETRISns3Facilities> facilities = (*i)->GetObject <iTETRISns3Facilities> ();
+      if (facilities == NULL)
+        {
+          C2CFacilitiesHelper facilitiesHelper;
+          facilitiesHelper.AddDefaultServices (m_servListHelper);
+          facilitiesHelper.Install (*i);
+          NS_LOG_INFO ("The object iTETRISns3Facilities has been installed in the vehicle");
+        }
+      else
+        {
+          C2CFacilitiesHelper facilitiesHelper;
+          facilitiesHelper.SetServiceListHelper (m_servListHelper);
+          facilitiesHelper.AddServices (facilities, *i);
+          NS_LOG_INFO ("New services have been installed in the vehicle");
+        }
+
       index ++;
     }
     

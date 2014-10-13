@@ -30,6 +30,7 @@
 #include "comm-module-installer.h"
 #include "ns3/C2C-IP-helper.h"
 //#include "ns3/Lte-App-helper.h"
+#include "ns3/CAMmanage-helper.h"
 #include "ns3/service-list-helper.h"
 #include "ns3/c2c-interface-helper.h"
 #include "ns3/point-to-point-epc-helper.h"
@@ -63,6 +64,7 @@ class LteInstaller : public CommModuleInstaller
 
     C2CIPHelper* m_c2cIpHelper;
 //    LTEAppHelper* m_lteAppHelper;
+    CAMmanageHelper* m_camHelper;
     ServiceListHelper* m_servListHelper;
     c2cInterfaceHelper inf;
  

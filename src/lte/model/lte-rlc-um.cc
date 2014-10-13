@@ -347,7 +347,10 @@ LteRlcUm::DoNotifyTxOpportunity (uint32_t bytes, uint8_t layer, uint8_t harqId)
     {
       NS_LOG_LOGIC ("Adding SDU/segment to packet, length = " << (*it)->GetSize ());
 
-      packet->AddAtEnd (*it);
+      if(!packet->GetSize()) // A work around to save original PacketTagsList
+        packet = (*it)->Copy();
+      else
+        packet->AddAtEnd (*it);
       it++;
     }
 

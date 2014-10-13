@@ -184,7 +184,10 @@ c2cL3Protocol::AddInterface (NetDeviceType deviceType, Ptr<NetDevice> device)
   //---------------- check iTETRIS ----------------------------
 
   Ptr<Node> node = GetObject<Node> ();
-  node->RegisterProtocolHandler (MakeCallback (&c2cL3Protocol::Receive, this), c2cL3Protocol::PROT_NUMBER, device, true);
+  if(deviceType != LTE_DEVICE)
+    node->RegisterProtocolHandler (MakeCallback (&c2cL3Protocol::Receive, this), c2cL3Protocol::PROT_NUMBER, device, true);
+  else
+    node->RegisterProtocolHandler (MakeCallback (&c2cL3Protocol::Receive, this), c2cL3Protocol::PROT_NUMBER, device, false);//Promisc mode is not supported by lte
 
   Ptr<c2cInterface> interface = CreateObject<c2cInterface> ();
   interface->SetNode (m_node);

@@ -29,6 +29,7 @@
 #include "ns3/ip-base-sta-mgnt.h"
 #include "ns3/IPCIU-facilities-helper.h"
 #include "ns3/IPCIUFacilities.h"
+#include "ns3/c2c-facilities-helper.h"
 #include "ns3/log.h"
 
 namespace ns3

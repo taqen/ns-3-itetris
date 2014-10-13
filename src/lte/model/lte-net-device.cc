@@ -304,9 +304,8 @@ LteNetDevice::Receive (Ptr<Packet> p)
 		  m_rxCallback (this, p, c2cL3Protocol::PROT_NUMBER, Address ());
 		  break;
 	  }
+	  NS_FATAL_ERROR("An ipv4 or c2c header is expected!");
   }
-
-  NS_FATAL_ERROR("An ipv4 or c2c header is expected!");
 }
 
 

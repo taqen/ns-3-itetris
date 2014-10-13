@@ -91,6 +91,7 @@ if (argc > 4 /*&& !inciPort.empty() && !fileConfTechnologies.empty() && !fileGen
 //  std::cout << inciPort << std::endl;
   int port = atoi(inciPort.c_str());   
 
+  Packet::EnablePrinting();
   ConfigurationManagerXml confManager (fileConfTechnologies);
   iTETRISNodeManager* nodeManager = new iTETRISNodeManager ();
   PacketManager* packetManager = new PacketManager (); 
