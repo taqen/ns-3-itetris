@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<lteBs>
+
+   <LtePhy name="NodeB">
+  </LtePhy>
+  
+  <ipConfiguration>
+    <ip address="10.1.4.0" mask="255.255.255.0"/>
+  </ipConfiguration>
+  
+    <applications>
+    <application>
+      <C2CIP itetrisName="serviceIdUnicast"/>
+      <C2CIP attribute="PortC2C" value="7090"/>
+      <C2CIP attribute="PortIP" value="7091"/>
+      <C2CIP attribute="Frequency" value="2"/>
+      <C2CIP attribute="PacketSize" value="300"/>
+    </application>
+    <application>
+      <C2CIP itetrisName="serviceIdTopobroadcast"/>
+      <C2CIP attribute="PortC2C" value="8083"/>
+      <C2CIP attribute="PortIP" value="8082"/>
+      <C2CIP attribute="Frequency" value="2"/>
+      <C2CIP attribute="PacketSize" value="300"/>
+    </application>
+  </applications>
+
+  
+  
+</lteBs>
