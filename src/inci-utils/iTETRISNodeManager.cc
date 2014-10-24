@@ -45,7 +45,7 @@ uint32_t iTETRISNodeManager::CreateItetrisNode (Vector position)
   mobModel->SetPosition(position);
   Vector newPos= mobModel->GetPosition();
   NS_LOG_DEBUG ( "ns-3 server --> node position= ("<< newPos.x << ", " << newPos.y << ")" ); 
-  return node->GetId();	
+  return node->GetId();
 }
 
 uint32_t iTETRISNodeManager::CreateItetrisNode (const Vector &position, const float &speed, const float & heading, const std::string &laneId)
@@ -63,7 +63,7 @@ uint32_t iTETRISNodeManager::CreateItetrisNode (const Vector &position, const fl
   itetrisMobModel->SetPositionAndSpeed (position, speed, heading, GetEdgeId (laneId), laneId);
   Vector newPos= itetrisMobModel->GetPosition();
   NS_LOG_DEBUG ( "ns-3 server --> node position= ("<< newPos.x << ", " << newPos.y << ")" );
-  return node->GetId();	
+  return node->GetId();
 }
 
 void iTETRISNodeManager::CreateItetrisNode (void)
@@ -161,7 +161,7 @@ iTETRISNodeManager::SetDefaultModule (std::string typeOfModule)
 void
 iTETRISNodeManager::UpdateNodePosition (uint32_t nodeId, Vector position) 
 {
-  Ptr<Node> node = m_iTETRISNodes.Get(nodeId);  
+  Ptr<Node> node = GetItetrisNode(nodeId);
   Ptr<MobilityModel> mobModel = node->GetObject<MobilityModel> ();  
   mobModel->SetPosition(position);  
 }
@@ -169,7 +169,7 @@ iTETRISNodeManager::UpdateNodePosition (uint32_t nodeId, Vector position)
 void
 iTETRISNodeManager::UpdateNodePosition (uint32_t nodeId, const Vector &position, const float &speed, const float & heading, const std::string &laneId) 
 {
-  Ptr<Node> node = m_iTETRISNodes.Get(nodeId - 1);
+  Ptr<Node> node = GetItetrisNode(nodeId);
   Ptr<ItetrisMobilityModel> itetrisMobModel = node->GetObject<ItetrisMobilityModel> ();  
   if (itetrisMobModel == NULL)
     {
@@ -185,10 +185,15 @@ iTETRISNodeManager::GetItetrisNode (uint32_t nodeId)
 {
   Ptr<Node> node = NULL;
   uint32_t N = m_iTETRISNodes.GetN ();
-  if ( (nodeId <= (m_iTETRISNodes.GetN ())) && (m_iTETRISNodes.GetN () > 0) )
-    {
-      node = m_iTETRISNodes.Get(nodeId - 1); //TODO Verify this, apparently there is a bug in the old code
-    }
+  for(NodeContainer::Iterator it = m_iTETRISNodes.Begin(); it != m_iTETRISNodes.End(); ++it)
+  {
+	  if ((*it)->GetId() == nodeId)
+		  node = (*it);
+  }
+//  if ( (nodeId <= (m_iTETRISNodes.GetN () - 1)) && (m_iTETRISNodes.GetN () > 0) )
+//    {
+//      node = m_iTETRISNodes.Get(nodeId); //TODO Verify this, apparently there is a bug in the old code
+//    }
   return (node);
 }
 
