@@ -127,74 +127,6 @@ LteApp::StartApplication (void)
 {
 }
 
-void
-LteApp::ConfigureNode(Ipv4Address address)
-{
-  uint32_t netDeviceNumber=m_node->GetNDevices();
-  Ipv4InterfaceAddress interface;
-  
-  for(uint32_t i=0;i<netDeviceNumber;i++)
-  {
-
-      if(DynamicCast<LteUeNetDevice>(m_node->GetDevice(i)))
-	{
-	  DynamicCast<LteUserEquipmentManager>(DynamicCast<LteNetDevice>(m_node->GetDevice(i))->GetManager())
-	  ->NewApplicationConfiguration(m_applicationType,m_app_index,10000,m_packetSize);
-	  break;
-	}
-	else
-	{
-
-	  if(address==*(m_node->GetObject<LteBsMgnt>()->GetIpAddress(ID_BROADCAST)))
-	  {
-	    DynamicCast<LteBaseStationManager>(DynamicCast<LteNetDevice>(m_node->GetDevice(i))->GetManager())
-	    ->NewApplicationConfiguration("BROADCAST",m_app_index,(m_packetSize * 8) * m_frequency,ID_BROADCAST,address);
-
-	  }
-	  else if(address.IsMulticast())
-	  {
-	    DynamicCast<LteBaseStationManager>(DynamicCast<LteNetDevice>(m_node->GetDevice(i))->GetManager())
-	    ->NewApplicationConfiguration("MULTICAST",m_app_index,100000,ID_MULTICAST,address);
-	  }
-	  else
-	  {
-	    DynamicCast<LteBaseStationManager>(DynamicCast<LteNetDevice>(m_node->GetDevice(i))->GetManager())
-	    ->NewApplicationConfiguration(m_applicationType,m_app_index,1000000,m_destinationId,address);
-	  }
-	}
-
-
-    
-   
-  }
-  
-}
-
-void
-LteApp::UninstallFlowInNode()
-{
-  uint32_t netDeviceNumber=m_node->GetNDevices();
-  
-  for(uint32_t i=0;i<netDeviceNumber;i++)
-  {
-      if(DynamicCast<LteUeNetDevice>(m_node->GetDevice(i)))
-	{
-	  DynamicCast<LteUserEquipmentManager>(DynamicCast<LteNetDevice>(m_node->GetDevice(i))->GetManager())
-	  ->RemoveApplication(m_app_index,m_applicationType);
-	  break;
-	}
-	else
-	{
-	  DynamicCast<LteBaseStationManager>(DynamicCast<LteNetDevice>(m_node->GetDevice(i))->GetManager())
-	  ->RemoveApplication(m_app_index,m_applicationType,m_destinationId);
-	  break;
-	}
-            
-    
-   
-  }
-}
-
 
 void
 LteApp::SetSockets (void)
@@ -233,7 +165,6 @@ LteApp::StopApplication(void)
 void 
 LteApp::StopTransmitting(void){
   
-  UninstallFlowInNode();
   m_runningIP = false;
 
     if (m_sendEventIP.IsRunning ())
@@ -242,35 +173,6 @@ LteApp::StopTransmitting(void){
       NS_LOG_INFO("[ns3][LteApp] *******  STOP IP transmission on node " << GetNode()->GetId() <<"  while running *********\n");;
     }
   
-}
-
-void
-LteApp::FindNodeIdentifier(Ipv4Address address)
-{
-  uint32_t netDeviceNumber=m_node->GetNDevices();
-  
-  for(uint32_t i=0;i<netDeviceNumber;i++)
-  {
-    if(DynamicCast<LteNetDevice>(m_node->GetDevice(i)))
-    {
-      if(DynamicCast<LteNetDevice>(m_node->GetDevice(i))->GetNodeType()=="NodeUE")
-	{
-	  m_destinationId=DynamicCast<LteUserEquipmentManager>(DynamicCast<LteNetDevice>(m_node->GetDevice(i))->GetManager())
-	  ->GetNodeBIdentifier();
-	  break;
-	}
-	else
-	{
-	  m_destinationId=DynamicCast<LteBaseStationManager>(DynamicCast<LteNetDevice>(m_node->GetDevice(i))->GetManager())
-	  ->GetNodeUEIdentifier(address);	  
-	  break;
-	}
-      
-      
-    }
-    
-   
-  }
 }
 
 void 
@@ -282,13 +184,7 @@ LteApp::StartTransmitting(Ipv4Address address )
   m_stepSequenceNumber=0;
   
   
-  if(m_applicationType!="BROADCAST"&&m_applicationType!="MULTICAST")
-  {    
-    FindNodeIdentifier(address);
-  }
-  
   NS_LOG_INFO("[ns3][LteApp] ======NODE " << GetNode()->GetId() <<" Tx to address " << address<<" AppType "<< m_applicationType<<"  ===========\n");
-  ConfigureNode(address);
 
   m_IPAddress = address;
   Address destinationaddress = InetSocketAddress(m_IPAddress, m_portIP);

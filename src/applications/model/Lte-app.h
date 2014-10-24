@@ -60,9 +60,7 @@ public:
   
   void StopTransmitting(void);
   void SetPacketSize (uint32_t packetSize); 
-  void UninstallFlowInNode();
-  void ConfigureNode(Ipv4Address address);
-  void FindNodeIdentifier(Ipv4Address address);
+
 
 protected:
   virtual void DoDispose (void);
