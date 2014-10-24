@@ -46,6 +46,7 @@ LteVehicleInstaller::DoInstall (NodeContainer container)
   NetDeviceContainer devices = lte->InstallUeDevice(container);
   m_ipAddressHelper.Assign (devices);
   ueNodes.Add(container);
+  ueDevices.Add(devices);
 
    uint32_t index = 0;
 
@@ -105,6 +106,7 @@ LteVehicleInstaller::DoInstall (NodeContainer container)
     }
   
   lte->Attach(devices);
+  AddVehicles(enbNodes, devices);
 
   return devices;
 }

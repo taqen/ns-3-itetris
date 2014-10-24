@@ -22,6 +22,7 @@
 #include "lte-bs-mgnt.h"
 #include "ns3/lte-net-device.h"
 #include "ns3/addressing-support.h"
+#include "ns3/ipv4.h"
 
 NS_LOG_COMPONENT_DEFINE ("LteBsMgnt");
 
@@ -46,25 +47,31 @@ LteBsMgnt::~LteBsMgnt ()
 Ipv4Address* 
 LteBsMgnt::GetIpAddress (uint32_t nodeId) const
 {
-  Ipv4Address* address = NULL;
+  Ipv4Address address;
   TriggerVehiclesScanning (); 
   if (nodeId == ID_BROADCAST)
-    { 
-      address = GetIpBroadcastAddress ();
+    {
+      address = *GetIpBroadcastAddress ();
     }
   else
-    {     
-//TODO Implement      address =DynamicCast<LteBaseStationManager>(DynamicCast<LteNetDevice>(m_netDevice)->GetManager())->GetNodeUEIpAddress(nodeId);
+    {
+	  for(VehicleList::const_iterator it = vehicleList.begin(); it != vehicleList.end(); ++it)
+	  {
+		  uint32_t id = (*it)->GetNode()->GetId();
+		  if(nodeId == id)
+			  {
+			  	  address = (*it)->GetNode()->GetObject<Ipv4> ()->GetAddress(1,0).GetLocal();
+			  	  return (&address);
+			  }
+	  }
     }
-  return (address);
+  return (&address);
 }
 
 void
 LteBsMgnt::AddVehicle(Ptr<LteNetDevice> netDevice)
 {
-
-//  DynamicCast<LteBaseStationManager>(DynamicCast<LTENetDevice>(m_netDevice)->GetManager())->
-//      AddNodeUE(DynamicCast<LteUserEquipmentManager>(DynamicCast<LTENetDevice>(netDevice)->GetManager()));
+	vehicleList.push_back(netDevice);
 }
 
 void 
