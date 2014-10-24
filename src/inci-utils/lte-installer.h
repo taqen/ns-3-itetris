@@ -29,7 +29,7 @@
 #include "ns3/ipv4-address-helper.h"
 #include "comm-module-installer.h"
 #include "ns3/C2C-IP-helper.h"
-//#include "ns3/Lte-App-helper.h"
+#include "ns3/Lte-App-helper.h"
 #include "ns3/CAMmanage-helper.h"
 #include "ns3/service-list-helper.h"
 #include "ns3/c2c-interface-helper.h"
@@ -51,6 +51,8 @@ class LteInstaller : public CommModuleInstaller
     
     virtual NetDeviceContainer DoInstall (NodeContainer container) = 0;
 
+    void AddVehicles(NodeContainer container,NetDeviceContainer netDevices);
+
   protected:
     void AddInterfacesToIpInterfaceList (NodeContainer container);
 
@@ -59,11 +61,13 @@ class LteInstaller : public CommModuleInstaller
   
     static Ipv4AddressHelper m_ipAddressHelper;
 
-    NodeContainer enbNodes;
-    NodeContainer ueNodes;
+    static NodeContainer enbNodes;
+    static NodeContainer ueNodes;
+    static NetDeviceContainer ueDevices;
+    static NetDeviceContainer enbDevices;
 
     C2CIPHelper* m_c2cIpHelper;
-//    LTEAppHelper* m_lteAppHelper;
+    LTEAppHelper* m_lteAppHelper;
     CAMmanageHelper* m_camHelper;
     ServiceListHelper* m_servListHelper;
     c2cInterfaceHelper inf;

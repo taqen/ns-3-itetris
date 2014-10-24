@@ -46,7 +46,7 @@ class LteBsMgnt : public IpBaseStaMgnt
     void TriggerVehiclesScanning (void) const;
   protected:
     
-    typedef std::list<LteUeNetDevice > VehicleList;
+    typedef std::list<Ptr<LteNetDevice> > VehicleList;
     VehicleList vehicleList;
 
 

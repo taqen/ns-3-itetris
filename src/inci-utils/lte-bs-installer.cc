@@ -19,6 +19,7 @@
  */
 
 #include "lte-bs-installer.h"
+#include "ns3/itetris-mobility-model.h"
 
 NS_LOG_COMPONENT_DEFINE ("LteBsInstaller");
 
@@ -41,13 +42,45 @@ LteBsInstaller::LteBsInstaller ()
 
 }
 
+//void
+//LteBsInstaller::AddVehicles(NodeContainer container,NetDeviceContainer netDevices)
+//{
+//	for (NodeContainer::Iterator i = container.Begin (); i != container.End (); ++i)
+//	{
+//		for(NetDeviceContainer::Iterator iterator=netDevices.Begin();iterator!=netDevices.End();++iterator)
+//		{
+//			Ptr<LteBsMgnt> lteBsMgnt = (*i)->GetObject <LteBsMgnt> ();
+//			if(lteBsMgnt)
+//				lteBsMgnt->AddVehicle(DynamicCast<LteNetDevice>(*iterator));
+//			else
+//				NS_FATAL_ERROR("No LteBsMgnt Found");
+//		}
+//
+//	}
+//}
+
 NetDeviceContainer
 LteBsInstaller::DoInstall (NodeContainer container)
 {
   NS_LOG_INFO ("*** LteBsInstaller ***");
   
-  NetDeviceContainer devices = lte->InstallEnbDevice(container);
-  m_ipAddressHelper.Assign (devices);
+  NodeContainer::Iterator it = container.Begin();
+  NodeContainer enbContainer;
+  enbContainer.Create(container.GetN());
+  NodeContainer::Iterator enbit = enbContainer.Begin();
+
+  while(it!=container.End() && enbit!=enbContainer.End())
+  {
+	  Ptr<ItetrisMobilityModel> model = (*it)->GetObject<ItetrisMobilityModel>();
+	  (*enbit)->AggregateObject(CopyObject(model));
+	  ++it;
+	  ++enbit;
+  }
+  NetDeviceContainer edevices = lte->InstallEnbDevice(enbContainer);
+  m_ipAddressHelper.Assign (edevices);
+
+  NetDeviceContainer devices = lte->InstallUeDevice(container);
+  m_ipAddressHelper.Assign(devices);
 
   enbNodes.Add(container);
 
@@ -57,55 +90,37 @@ LteBsInstaller::DoInstall (NodeContainer container)
     {
       // Check if the base station has the object LteBsMgnt already installed
 //TODO implement
-      Ptr<IpBaseStaMgnt> lteBsMgnt = (*i)->GetObject <LteBsMgnt> ();
+      Ptr<LteBsMgnt> lteBsMgnt = (*i)->GetObject <LteBsMgnt> ();
       if (lteBsMgnt  == NULL)
-	{
-          Ptr<NetDevice> device = devices.Get(index);
-          lteBsMgnt = CreateObject <LteBsMgnt> ();
-          lteBsMgnt->SetNode (*i);
-          lteBsMgnt->SetNetDevice (device);
-          (*i)->AggregateObject (lteBsMgnt);
-          NS_LOG_INFO ("The object LteBsMgnt has been installed in the base station");
-        }
+      {
+    	  Ptr<NetDevice> device = devices.Get(index);
+    	  lteBsMgnt = CreateObject <LteBsMgnt> ();
+    	  lteBsMgnt->SetNode (*i);
+    	  lteBsMgnt->SetNetDevice (device);
+    	  (*i)->AggregateObject (lteBsMgnt);
+    	  NS_LOG_INFO ("The object LteBsMgnt has been installed in the base station");
+      }
         
 //        DynamicCast<LTENetDevice>(devices.Get(index))->SetIpAddress();
         
       // Check if the vehicle has the Facilties already installed
 //     Ptr<iTETRISns3Facilities> facilities = (*i)->GetObject <iTETRISns3Facilities> ();
-      Ptr<iTETRISns3Facilities> facilities = (*i)->GetObject <iTETRISns3Facilities> ();
+      Ptr<IPCIUFacilities> facilities = (*i)->GetObject <IPCIUFacilities> ();
       if (facilities == NULL)
-        {
-          C2CFacilitiesHelper facilitiesHelper;
-          facilitiesHelper.AddDefaultServices (m_servListHelper);
-          facilitiesHelper.Install (*i);
-          NS_LOG_INFO ("The object iTETRISns3Facilities has been installed in the vehicle");
-        }
-      else
-        {
-          C2CFacilitiesHelper facilitiesHelper;
-          facilitiesHelper.SetServiceListHelper (m_servListHelper);
-          facilitiesHelper.AddServices (facilities, *i);
-          NS_LOG_INFO ("New services have been installed in the vehicle");
-        }
+      {
+    	  IPCIUFacilitiesHelper facilitiesHelper;
+    	  facilitiesHelper.SetServiceListHelper (m_servListHelper);
+    	  facilitiesHelper.Install (*i);
+    	  NS_LOG_INFO ("The object IPCIUFacilities has been installed in the vehicle");
+      }
 
       index ++;
     }
     
-    
-    return devices;
+  lte->Attach(devices);
+  AddVehicles(container, ueDevices);
+  enbDevices.Add(devices);
+  return devices;
 }
-
-// void
-// LteBsInstaller::AddVehicles(NetDeviceContainer netDevices)
-// {
-//   for (NetDeviceContainer::Iterator i = baseStationContainer.Begin (); i != baseStationContainer.End (); ++i)
-//   {
-//       for(NetDeviceContainer::Iterator iterator=netDevices.Begin();iterator!=netDevices.End();++iterator)
-//       {
-// 	(*i)->GetObject <LteBsMgnt> ()->AddVehicle(DynamicCast<LTENetDevice>(*iterator));
-//       }
-//       
-//   }
-// }
 
 } // namespace ns3

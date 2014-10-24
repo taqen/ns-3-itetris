@@ -40,7 +40,7 @@ class LteBsInstaller : public LteInstaller
   public:
     static TypeId GetTypeId (void);
     LteBsInstaller ();
-//     void AddVehicles(NetDeviceContainer netDevices);    
+//    void AddVehicles(NodeContainer container,NetDeviceContainer netDevices);
 //     void AddBaseStations (NetDeviceContainer devices) {};
   private:
     NetDeviceContainer DoInstall(NodeContainer container);
