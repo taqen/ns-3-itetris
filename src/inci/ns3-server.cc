@@ -354,7 +354,7 @@ Ns3Server::RunSimStep(int time)
 	if ( !(Simulator::IsFinished()) )  // IsFinished == true if no event to be scheduled anymore || Simulator::Stop reached
 	{
 		int eventCounter=0;
-		while ( !(Simulator::IsFinished()) && (Seconds(time) > Simulator::Next ()) )
+		while ( !(Simulator::IsFinished()) && (Seconds(time) >= Simulator::Next ()) )
 		{
 			Simulator::RunOneEvent ();
 			eventCounter++;
