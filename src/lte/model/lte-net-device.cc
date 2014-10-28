@@ -289,23 +289,9 @@ LteNetDevice::Receive (Ptr<Packet> p)
   Ptr<Packet> copy = p->Copy();
   PacketMetadata::ItemIterator iterator = copy->BeginItem ();
   PacketMetadata::Item item;
-  while  (iterator.HasNext ())
-  {
-	  item = iterator.Next ();
-	  if (item.tid.GetName() == "ns3::Ipv4Header")
-	  {
-		  NS_LOG_DEBUG("Ipv4 header found");
-		  m_rxCallback (this, p, Ipv4L3Protocol::PROT_NUMBER, Address ());
-		  break;
-	  }
-	  else if (item.tid.GetName() == "ns3::c2cCommonHeader")
-	  {
-		  NS_LOG_DEBUG("c2c common header found");
-		  m_rxCallback (this, p, c2cL3Protocol::PROT_NUMBER, Address ());
-		  break;
-	  }
-	  NS_FATAL_ERROR("An ipv4 or c2c header is expected!");
-  }
+
+  m_rxCallback (this, p, Ipv4L3Protocol::PROT_NUMBER, Address ());
+
 }
 
 
