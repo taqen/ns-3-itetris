@@ -36,6 +36,7 @@
 #include "ns3/point-to-point-epc-helper.h"
 #include "ns3/lte-net-device.h"
 #include "ns3/lte-bs-mgnt.h"
+#include "ns3/internet-stack-helper.h"
 
 NS_LOG_COMPONENT_DEFINE ("LteInstaller");
 
@@ -64,7 +65,6 @@ TypeId LteInstaller::GetTypeId (void)
 LteInstaller::LteInstaller () {
 
    m_servListHelper = new ServiceListHelper ();
-   m_c2cIpHelper = NULL;
    m_lteAppHelper=NULL;
    m_ipAddressHelper.SetBase ("10.3.0.0", "255.255.0.0");
    if(epcHelper==NULL)
@@ -77,10 +77,8 @@ LteInstaller::LteInstaller () {
 
 LteInstaller::~LteInstaller()
 { 
-  delete m_c2cIpHelper; 
   delete m_servListHelper;  
   delete m_lteAppHelper;
-  m_c2cIpHelper = NULL; 
   m_servListHelper = NULL; 
   m_lteAppHelper=NULL;
 }
@@ -90,7 +88,7 @@ LteInstaller::Install (NodeContainer container)
 {
   NetDeviceContainer netDevices = DoInstall(container);
   AddInterfacesToIpInterfaceList(container);
-  m_ipAddressHelper.Assign(netDevices);
+//  m_ipAddressHelper.Assign(netDevices);
 
 }
 

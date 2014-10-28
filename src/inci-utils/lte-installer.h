@@ -34,6 +34,7 @@
 #include "ns3/service-list-helper.h"
 #include "ns3/c2c-interface-helper.h"
 #include "ns3/point-to-point-epc-helper.h"
+#include "ns3/ipv4-static-routing-helper.h"
 
 namespace ns3
 {
@@ -70,7 +71,7 @@ class LteInstaller : public CommModuleInstaller
     LTEAppHelper* m_lteAppHelper;
     CAMmanageHelper* m_camHelper;
     ServiceListHelper* m_servListHelper;
-    c2cInterfaceHelper inf;
+    Ipv4StaticRoutingHelper  ipv4RoutingHelper;
  
 };
 

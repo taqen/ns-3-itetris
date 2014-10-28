@@ -20,6 +20,10 @@
 
 #include "lte-bs-installer.h"
 #include "ns3/itetris-mobility-model.h"
+#include "ns3/ipv4-static-routing-helper.h"
+#include "ns3/ipv4-static-routing.h"
+#include "ns3/point-to-point-helper.h"
+#include "ns3/internet-stack-helper.h"
 
 NS_LOG_COMPONENT_DEFINE ("LteBsInstaller");
 
@@ -42,28 +46,14 @@ LteBsInstaller::LteBsInstaller ()
 
 }
 
-//void
-//LteBsInstaller::AddVehicles(NodeContainer container,NetDeviceContainer netDevices)
-//{
-//	for (NodeContainer::Iterator i = container.Begin (); i != container.End (); ++i)
-//	{
-//		for(NetDeviceContainer::Iterator iterator=netDevices.Begin();iterator!=netDevices.End();++iterator)
-//		{
-//			Ptr<LteBsMgnt> lteBsMgnt = (*i)->GetObject <LteBsMgnt> ();
-//			if(lteBsMgnt)
-//				lteBsMgnt->AddVehicle(DynamicCast<LteNetDevice>(*iterator));
-//			else
-//				NS_FATAL_ERROR("No LteBsMgnt Found");
-//		}
-//
-//	}
-//}
-
 NetDeviceContainer
 LteBsInstaller::DoInstall (NodeContainer container)
 {
   NS_LOG_INFO ("*** LteBsInstaller ***");
   
+  InternetStackHelper internet;
+  internet.Install (container);
+
   NodeContainer::Iterator it = container.Begin();
   NodeContainer enbContainer;
   enbContainer.Create(container.GetN());
@@ -76,13 +66,38 @@ LteBsInstaller::DoInstall (NodeContainer container)
 	  ++it;
 	  ++enbit;
   }
+  internet.Install (enbContainer);
+
   NetDeviceContainer edevices = lte->InstallEnbDevice(enbContainer);
-  m_ipAddressHelper.Assign (edevices);
+//  m_ipAddressHelper.Assign (edevices);
 
   NetDeviceContainer devices = lte->InstallUeDevice(container);
-  m_ipAddressHelper.Assign(devices);
+//  m_ipAddressHelper.Assign(devices);
 
   enbNodes.Add(container);
+
+  Ptr<Node> pgw = epcHelper->GetPgwNode ();
+  Ptr<Node> remoteHost = container.Get(0);
+  PointToPointHelper p2ph;
+  p2ph.SetDeviceAttribute ("DataRate", DataRateValue (DataRate ("100Gb/s")));
+  p2ph.SetDeviceAttribute ("Mtu", UintegerValue (1500));
+  p2ph.SetChannelAttribute ("Delay", TimeValue (Seconds (0.010)));
+  NetDeviceContainer internetDevices = p2ph.Install(pgw, remoteHost);
+  Ipv4InterfaceContainer internetIpIfaces = m_ipAddressHelper.Assign(internetDevices);
+  Ipv4Address remotehostAddr = internetIpIfaces.GetAddress(1);
+
+  Ptr<Ipv4StaticRouting> remoteHostStaticRouting = ipv4RoutingHelper.GetStaticRouting (remoteHost->GetObject<Ipv4> ());
+  remoteHostStaticRouting->AddNetworkRouteTo (Ipv4Address ("7.0.0.0"), Ipv4Mask ("255.0.0.0"), 1);
+
+
+  Ipv4InterfaceContainer ueIpIface = epcHelper->AssignUeIpv4Address(devices);
+  for (uint32_t u = 0; u < container.GetN (); ++u)
+  {
+	  Ptr<Node> ueNode = container.Get (u);
+	  // Set the default gateway for the UE
+	  Ptr<Ipv4StaticRouting> ueStaticRouting = ipv4RoutingHelper.GetStaticRouting (ueNode->GetObject<Ipv4> ());
+         ueStaticRouting->SetDefaultRoute (epcHelper->GetUeDefaultGatewayAddress (), 1);
+  }
 
   uint32_t index = 0;
 
@@ -100,11 +115,7 @@ LteBsInstaller::DoInstall (NodeContainer container)
     	  (*i)->AggregateObject (lteBsMgnt);
     	  NS_LOG_INFO ("The object LteBsMgnt has been installed in the base station");
       }
-        
-//        DynamicCast<LTENetDevice>(devices.Get(index))->SetIpAddress();
-        
-      // Check if the vehicle has the Facilties already installed
-//     Ptr<iTETRISns3Facilities> facilities = (*i)->GetObject <iTETRISns3Facilities> ();
+
       Ptr<IPCIUFacilities> facilities = (*i)->GetObject <IPCIUFacilities> ();
       if (facilities == NULL)
       {

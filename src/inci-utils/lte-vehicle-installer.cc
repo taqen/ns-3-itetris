@@ -19,7 +19,9 @@
  */
 
 #include "lte-vehicle-installer.h"
-
+#include "ns3/IPCIU-facilities-helper.h"
+#include "ns3/IPCIUFacilities.h"
+#include "ns3/internet-stack-helper.h"
 
  
 NS_LOG_COMPONENT_DEFINE ("LteVehicleInstaller");
@@ -43,11 +45,22 @@ LteVehicleInstaller::DoInstall (NodeContainer container)
 {
   NS_LOG_INFO ("*** LteVehicleInstaller ***");
   
+  InternetStackHelper internet;
+  internet.Install (container);
+
   NetDeviceContainer devices = lte->InstallUeDevice(container);
-  m_ipAddressHelper.Assign (devices);
+//  m_ipAddressHelper.Assign (devices);
   ueNodes.Add(container);
   ueDevices.Add(devices);
 
+  Ipv4InterfaceContainer ueIpIface = epcHelper->AssignUeIpv4Address(devices);
+  for (uint32_t u = 0; u < container.GetN (); ++u)
+  {
+	  Ptr<Node> ueNode = container.Get (u);
+	  // Set the default gateway for the UE
+	  Ptr<Ipv4StaticRouting> ueStaticRouting = ipv4RoutingHelper.GetStaticRouting (ueNode->GetObject<Ipv4> ());
+         ueStaticRouting->SetDefaultRoute (epcHelper->GetUeDefaultGatewayAddress (), 1);
+  }
    uint32_t index = 0;
 
   for (NodeContainer::Iterator i = container.Begin (); i != container.End (); i++)
@@ -85,22 +98,15 @@ LteVehicleInstaller::DoInstall (NodeContainer container)
 //      DynamicCast<LteNetDevice>(devices.Get(index))->SetIpAddress(); //TODO support
       
        // Check if the vehicle has the Facilties already installed
-      Ptr<iTETRISns3Facilities> facilities = (*i)->GetObject <iTETRISns3Facilities> ();
-      if (facilities == NULL)
-	{
-          C2CFacilitiesHelper facilitiesHelper;
-          facilitiesHelper.AddDefaultServices (m_servListHelper);
-          facilitiesHelper.Install (*i);
-          NS_LOG_INFO ("The object iTETRISns3Facilities has been installed in the vehicle");
-        }
-      else
-        {
-          C2CFacilitiesHelper facilitiesHelper;
-          facilitiesHelper.SetServiceListHelper (m_servListHelper);
-          facilitiesHelper.AddServices (facilities, *i);
-          NS_LOG_INFO ("New services have been installed in the vehicle");
-        }
 
+      Ptr<IPCIUFacilities> facilities = (*i)->GetObject <IPCIUFacilities> ();
+      if (facilities == NULL)
+      {
+    	  IPCIUFacilitiesHelper facilitiesHelper;
+    	  facilitiesHelper.SetServiceListHelper (m_servListHelper);
+    	  facilitiesHelper.Install (*i);
+    	  NS_LOG_INFO ("The object IPCIUFacilities has been installed in the vehicle");
+      }
 
       index ++;
     }
