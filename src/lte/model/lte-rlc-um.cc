@@ -90,11 +90,13 @@ LteRlcUm::DoTransmitPdcpPdu (Ptr<Packet> p)
     {
       /** Store arrival time */
       RlcTag timeTag (Simulator::Now ());
+      p->RemovePacketTag(timeTag);
       p->AddPacketTag (timeTag);
 
       /** Store PDCP PDU */
 
       LteRlcSduStatusTag tag;
+      p->RemovePacketTag(tag);
       tag.SetStatus (LteRlcSduStatusTag::FULL_SDU);
       p->AddPacketTag (tag);
 
@@ -347,10 +349,10 @@ LteRlcUm::DoNotifyTxOpportunity (uint32_t bytes, uint8_t layer, uint8_t harqId)
     {
       NS_LOG_LOGIC ("Adding SDU/segment to packet, length = " << (*it)->GetSize ());
 
-      if(!packet->GetSize()) // A work around to save original PacketTagsList
-        packet = (*it)->Copy();
+      if(!packet->GetSize())
+    	  packet = (*it)->Copy();
       else
-        packet->AddAtEnd (*it);
+    	  packet->AddAtEnd (*it);
       it++;
     }
 
