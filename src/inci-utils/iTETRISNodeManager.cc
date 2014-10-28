@@ -188,12 +188,11 @@ iTETRISNodeManager::GetItetrisNode (uint32_t nodeId)
   for(NodeContainer::Iterator it = m_iTETRISNodes.Begin(); it != m_iTETRISNodes.End(); ++it)
   {
 	  if ((*it)->GetId() == nodeId)
-		  node = (*it);
+		  {
+		  	  node = (*it);
+		  	  break;
+		  }
   }
-//  if ( (nodeId <= (m_iTETRISNodes.GetN () - 1)) && (m_iTETRISNodes.GetN () > 0) )
-//    {
-//      node = m_iTETRISNodes.Get(nodeId); //TODO Verify this, apparently there is a bug in the old code
-//    }
   return (node);
 }
 

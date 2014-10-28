@@ -298,7 +298,7 @@ LteNetDevice::Receive (Ptr<Packet> p)
 		  m_rxCallback (this, p, Ipv4L3Protocol::PROT_NUMBER, Address ());
 		  break;
 	  }
-	  if (item.tid.GetName() == "ns3::c2cCommonHeader")
+	  else if (item.tid.GetName() == "ns3::c2cCommonHeader")
 	  {
 		  NS_LOG_DEBUG("c2c common header found");
 		  m_rxCallback (this, p, c2cL3Protocol::PROT_NUMBER, Address ());
