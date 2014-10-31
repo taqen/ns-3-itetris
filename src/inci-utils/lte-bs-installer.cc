@@ -51,8 +51,8 @@ LteBsInstaller::DoInstall (NodeContainer container)
 {
   NS_LOG_INFO ("*** LteBsInstaller ***");
   
-  InternetStackHelper internet;
-  internet.Install (container);
+//  InternetStackHelper internet;
+//  internet.Install (container);
 
   NodeContainer::Iterator it = container.Begin();
   NodeContainer enbContainer;
@@ -66,7 +66,7 @@ LteBsInstaller::DoInstall (NodeContainer container)
 	  ++it;
 	  ++enbit;
   }
-  internet.Install (enbContainer);
+//  internet.Install (enbContainer);
 
   NetDeviceContainer edevices = lte->InstallEnbDevice(enbContainer);
 //  m_ipAddressHelper.Assign (edevices);
@@ -78,13 +78,13 @@ LteBsInstaller::DoInstall (NodeContainer container)
 
   Ptr<Node> pgw = epcHelper->GetPgwNode ();
   Ptr<Node> remoteHost = container.Get(0);
+
   PointToPointHelper p2ph;
   p2ph.SetDeviceAttribute ("DataRate", DataRateValue (DataRate ("100Gb/s")));
   p2ph.SetDeviceAttribute ("Mtu", UintegerValue (1500));
   p2ph.SetChannelAttribute ("Delay", TimeValue (Seconds (0.010)));
   NetDeviceContainer internetDevices = p2ph.Install(pgw, remoteHost);
   Ipv4InterfaceContainer internetIpIfaces = m_ipAddressHelper.Assign(internetDevices);
-  Ipv4Address remotehostAddr = internetIpIfaces.GetAddress(1);
 
   Ptr<Ipv4StaticRouting> remoteHostStaticRouting = ipv4RoutingHelper.GetStaticRouting (remoteHost->GetObject<Ipv4> ());
   remoteHostStaticRouting->AddNetworkRouteTo (Ipv4Address ("7.0.0.0"), Ipv4Mask ("255.0.0.0"), 1);

@@ -365,6 +365,7 @@ InternetStackHelper::Setc2cStackInstall (bool enable)              //iTETRIS
 {
   m_c2cEnabled = enable;
 }
+
 void InternetStackHelper::SetIpv4ArpJitter (bool enable)
 {
   m_ipv4ArpJitterEnabled = enable;
@@ -468,7 +469,7 @@ InternetStackHelper::Install (Ptr<Node> node) const
 
       if (node->GetObject<Ipv4> () != 0)
         {
-          NS_LOG_ERROR ("InternetStackHelper::Install (): Aggregating "
+          NS_FATAL_ERROR ("InternetStackHelper::Install (): Aggregating "
                           "an InternetStack to a node with an existing Ipv4 object");
           return;
         }
