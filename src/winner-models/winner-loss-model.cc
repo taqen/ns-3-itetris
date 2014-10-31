@@ -187,11 +187,10 @@ WinnerLossModel::DoCalcRxPower (double txPowerDbm,
                                           Ptr<MobilityModel> a,
                                           Ptr<MobilityModel> b) const
 {
-  double loss, dist;
+  double loss;
   if (m_visibilityModel == NULL)
     {
       double distance = a->GetDistanceFrom (b);
-      dist = distance;
       loss = CalculateLossInLos (a,b,distance);
       if (m_shadowingModel)
         {

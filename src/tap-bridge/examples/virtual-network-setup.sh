@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 brctl addbr br-left
 brctl addbr br-right
 tunctl -t tap-left
@@ -12,5 +12,5 @@ ifconfig br-right up
 pushd /proc/sys/net/bridge
 for f in bridge-nf-*; do echo 0 > $f; done
 popd
-lxc-create -n left -f lxc-left.conf
-lxc-create -n right -f lxc-right.conf
+lxc-create -n left -f lxc-left.conf -t ubuntu
+lxc-create -n right -f lxc-right.conf -t ubuntu

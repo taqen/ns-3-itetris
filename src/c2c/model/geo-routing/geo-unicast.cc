@@ -108,10 +108,10 @@ geoUnicast::RouteOutput (Ptr<Packet> p, c2cCommonHeader::LongPositionVector sour
 
 //   result.route->SetOutputDevice ();
 
-  c2cCommonHeader::ShortPositionVector m_posvector;
-  m_posvector.gnAddr = m_c2c->GetObject<Node>()->GetId ();
-  m_posvector.Lat = sourcePosVector.Lat;
-  m_posvector.Long = sourcePosVector.Long;
+//  c2cCommonHeader::ShortPositionVector m_posvector;
+//  m_posvector.gnAddr = m_c2c->GetObject<Node>()->GetId ();
+//  m_posvector.Lat = sourcePosVector.Lat;
+//  m_posvector.Long = sourcePosVector.Long;
 
   gw = DirectNeighbour ((m_c2c->GetObject<Node> ())->GetObject<LocationTable> (), daddr);
   if (gw != 0)
@@ -196,11 +196,11 @@ geoUnicast::RouteInput (Ptr<const Packet> p, const c2cCommonHeader &header,
      {
 
       //Position is retrieved from the mobility model
-      c2cCommonHeader::ShortPositionVector m_posvector;
+//      c2cCommonHeader::ShortPositionVector m_posvector;
       Ptr<MobilityModel> model = m_c2c->GetObject<Node>()->GetObject<MobilityModel> ();
-      m_posvector.gnAddr = m_c2c->GetObject<Node>()->GetId ();
-      m_posvector.Lat = (uint32_t) model->GetPosition().x;
-      m_posvector.Long = (uint32_t) model->GetPosition().y;
+//      m_posvector.gnAddr = m_c2c->GetObject<Node>()->GetId ();
+//      m_posvector.Lat = (uint32_t) model->GetPosition().x;
+//      m_posvector.Long = (uint32_t) model->GetPosition().y;
 
       Ptr<c2cAddress> gw;
       gw = DirectNeighbour ((m_c2c->GetObject<Node> ())->GetObject<LocationTable> (), daddr);

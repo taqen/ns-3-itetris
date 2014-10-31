@@ -449,7 +449,7 @@ BsCommandManager::SendOnePacket (Mac48Address ssAddress)
 {
   Ptr<SsCommandManager> ssCommMngr = GetNonRegisteredSsManager (ssAddress);
   ssCommMngr->PeriodicScanning (); 
-  uint32_t sfid; 
+
   Ptr<SSManager> ssManager = m_bsDevice->GetSSManager();
   bool q = ssManager-> IsInRecord(ssAddress);
   if (!q)
@@ -465,7 +465,6 @@ BsCommandManager::SendOnePacket (Mac48Address ssAddress)
       NS_LOG_INFO ("SS's connection not created");
       ssCommandManager->InitiateConnection();
     }   
-  sfid= ssCommandManager->GetSfid();  
   Ptr<Packet> packet = Create<Packet> (50);  
   if (!m_bsDevice->Send (packet, ssAddress , 1)) 
     {

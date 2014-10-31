@@ -39,6 +39,11 @@ UMTSAppHelper::UMTSAppHelper ()
   m_factory.SetTypeId("ns3::UmtsApp");
 }
 
+UMTSAppHelper::~UMTSAppHelper ()
+{
+
+}
+
 void
 UMTSAppHelper::SetApplicationNodeType(std::string umtsNodeType)
 {

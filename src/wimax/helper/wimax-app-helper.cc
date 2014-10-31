@@ -38,6 +38,11 @@ WimaxAppHelper::WimaxAppHelper ()
   m_factory.SetTypeId("ns3::WimaxApp");
 }
 
+WimaxAppHelper::~WimaxAppHelper ()
+{
+
+}
+
 void
 WimaxAppHelper::SetAttribute (std::string name, const AttributeValue &value)
 {

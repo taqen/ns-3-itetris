@@ -356,9 +356,7 @@ int
 UmtsRrcLayerUE::PagingReceived(std::string type,uint32_t applicationId,uint32_t address)
 {
   int acked, fraged;
-  uint32_t code;
     
-  code=CONV_HALF;
   fraged=1;
   acked=1;
       

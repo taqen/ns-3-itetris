@@ -46,6 +46,7 @@ public:
    * to use Wimax.
    */
   WimaxAppHelper ();
+  virtual ~WimaxAppHelper ();
   
   void SetAttribute (std::string name, const AttributeValue &value);
   

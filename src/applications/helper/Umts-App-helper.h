@@ -45,6 +45,7 @@ public:
    * to use UMTS.
    */
   UMTSAppHelper ();
+  virtual ~UMTSAppHelper ();
   
   void SetAttribute (std::string name, const AttributeValue &value);
   

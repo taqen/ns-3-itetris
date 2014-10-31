@@ -39,6 +39,11 @@ LTEAppHelper::LTEAppHelper ()
   m_factory.SetTypeId("ns3::LteApp");
 }
 
+LTEAppHelper::~LTEAppHelper ()
+{
+
+}
+
 void
 LTEAppHelper::SetApplicationNodeType(std::string lteNodeType)
 {

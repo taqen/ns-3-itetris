@@ -47,6 +47,7 @@ public:
    */
   CAMmanageHelper (std::string protocol);
   CAMmanageHelper ();
+  virtual ~CAMmanageHelper ();
 
   void SetAttribute (std::string name, const AttributeValue &value);
 

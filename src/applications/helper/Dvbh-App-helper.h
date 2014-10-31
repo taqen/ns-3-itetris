@@ -47,7 +47,8 @@ public:
    * to use DVBH-Ap.
    */
   DvbhAppHelper ();
-  
+  virtual ~DvbhAppHelper ();
+
   void SetAttribute (std::string name, const AttributeValue &value);
   
   void SetApplicationNodeType(std::string umtsNodeType);
