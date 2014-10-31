@@ -67,12 +67,6 @@ LteInstaller::LteInstaller () {
    m_servListHelper = new ServiceListHelper ();
    m_lteAppHelper=NULL;
    m_ipAddressHelper.SetBase ("10.3.0.0", "255.255.0.0");
-   if(epcHelper==NULL)
-     {
-       epcHelper = CreateObject<PointToPointEpcHelper> ();
-       lte = CreateObject<LteHelper> ();
-       lte->SetEpcHelper(epcHelper);
-     }
 }
 
 LteInstaller::~LteInstaller()
@@ -86,6 +80,13 @@ LteInstaller::~LteInstaller()
 void
 LteInstaller::Install (NodeContainer container)
 {
+  if(epcHelper==NULL)
+    {
+      epcHelper = CreateObject<PointToPointEpcHelper> ();
+      lte = CreateObject<LteHelper> ();
+      lte->SetEpcHelper(epcHelper);
+    }
+
   NetDeviceContainer netDevices = DoInstall(container);
   AddInterfacesToIpInterfaceList(container);
 //  m_ipAddressHelper.Assign(netDevices);
