@@ -153,7 +153,7 @@ void CAMsend::SendPacket()
   NS_ASSERT (m_sendEvent.IsExpired ());
   Ptr<Packet> packet = Create<Packet> (m_pktSize);
 
-  m_sendCount = m_sendCount ++;
+  m_sendCount ++;
 
   //---------------- check iTETRIS ----------------------------
   std::cout<<std::endl;

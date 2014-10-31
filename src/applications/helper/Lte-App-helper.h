@@ -45,6 +45,8 @@ public:
    * to use LTE.
    */
   LTEAppHelper ();
+  virtual ~LTEAppHelper ();
+
   
   void SetAttribute (std::string name, const AttributeValue &value);
   

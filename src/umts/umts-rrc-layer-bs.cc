@@ -808,8 +808,6 @@ int
 UmtsRrcLayerBS::ResourceRequestReceived(std::string type,uint32_t applicationId,uint32_t destinationId)
 {
   int acked, fraged;
-  uint32_t code;   
-  code = CONV_HALF;                 // convolutional half
   fraged = 1;                       // fragmentation
   acked = 1;     
   int value=UpdateFlow (acked,fraged,applicationId,destinationId,0,Dedicated); 

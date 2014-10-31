@@ -38,6 +38,11 @@ DvbhAppHelper::DvbhAppHelper ()
   m_factory.SetTypeId("ns3::DvbhApp");
 }
 
+DvbhAppHelper::~DvbhAppHelper ()
+{
+
+}
+
 void
 DvbhAppHelper::SetApplicationNodeType(std::string dvbhNodeType)
 {

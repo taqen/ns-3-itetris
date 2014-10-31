@@ -462,8 +462,6 @@ UMTSNetDevice::Send (Ptr<Packet> packet, const Address& dest, uint16_t protocolN
   
   packet->PeekHeader(header);
   
-  Mac48Address realTo = Mac48Address::ConvertFrom (dest);
-  Mac48Address realFrom = Mac48Address::Allocate ();
 
   LlcSnapHeader llc;
   llc.SetType (protocolNumber);

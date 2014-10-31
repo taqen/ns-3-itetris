@@ -40,6 +40,11 @@ C2CIPHelper::C2CIPHelper (std::string SocketFactorytype1, std::string SocketFact
   m_factory.Set ("SocketFactorytype2", StringValue (SocketFactorytype2));
 }
 
+C2CIPHelper::~C2CIPHelper (void)
+{
+
+}
+
 void
 C2CIPHelper::SetAttribute (std::string name, const AttributeValue &value)
 {  

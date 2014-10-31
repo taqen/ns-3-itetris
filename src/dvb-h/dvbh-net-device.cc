@@ -249,9 +249,6 @@ DvbhNetDevice::SupportsSendFrom (void) const
 bool 
 DvbhNetDevice::Send (Ptr<Packet> packet, const Address& dest, uint16_t protocolNumber)
 {
-   
-  Mac48Address realTo = Mac48Address::ConvertFrom (dest);
-  Mac48Address realFrom = Mac48Address::Allocate ();
 
   DvbhDeltaTTag deltaTag;
   packet->PeekPacketTag(deltaTag);

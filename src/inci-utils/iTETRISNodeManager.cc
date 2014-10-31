@@ -51,7 +51,6 @@ uint32_t iTETRISNodeManager::CreateItetrisNode (Vector position)
 uint32_t iTETRISNodeManager::CreateItetrisNode (const Vector &position, const float &speed, const float & heading, const std::string &laneId)
 {
   CreateItetrisNode ();
-  uint32_t N = m_iTETRISNodes.GetN();
   Ptr<Node> node = m_iTETRISNodes.Get(m_iTETRISNodes.GetN() - 1);
   Ptr<ItetrisMobilityModel> itetrisMobModel = node->GetObject<ItetrisMobilityModel> ();
   if (itetrisMobModel == NULL)
@@ -184,7 +183,6 @@ Ptr<Node>
 iTETRISNodeManager::GetItetrisNode (uint32_t nodeId)
 {
   Ptr<Node> node = NULL;
-  uint32_t N = m_iTETRISNodes.GetN ();
   for(NodeContainer::Iterator it = m_iTETRISNodes.Begin(); it != m_iTETRISNodes.End(); ++it)
   {
 	  if ((*it)->GetId() == nodeId)

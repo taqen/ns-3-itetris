@@ -47,11 +47,11 @@ LteBsMgnt::~LteBsMgnt ()
 Ipv4Address* 
 LteBsMgnt::GetIpAddress (uint32_t nodeId) const
 {
-  Ipv4Address address;
+  Ipv4Address *address;
   TriggerVehiclesScanning (); 
   if (nodeId == ID_BROADCAST)
     {
-      address = *GetIpBroadcastAddress ();
+      address = GetIpBroadcastAddress ();
     }
   else
     {
@@ -60,12 +60,12 @@ LteBsMgnt::GetIpAddress (uint32_t nodeId) const
 		  uint32_t id = (*it)->GetNode()->GetId();
 		  if(nodeId == id)
 			  {
-			  	  address = (*it)->GetNode()->GetObject<Ipv4> ()->GetAddress(1,0).GetLocal();
-			  	  return (&address);
+			  	  address = new Ipv4Address ((*it)->GetNode()->GetObject<Ipv4> ()->GetAddress(1,0).GetLocal());
+			  	  break;
 			  }
 	  }
     }
-  return (&address);
+  return (address);
 }
 
 void
@@ -100,6 +100,7 @@ double
 LteBsMgnt::GetCoverageRange (void) const
 {
 //	return DynamicCast<LteBaseStationManager>(DynamicCast<LteNetDevice>(m_netDevice)->GetManager())->GetCoverageRange();
+	return 0.0;
 }
 
 } // namespace ns3

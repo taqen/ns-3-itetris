@@ -70,9 +70,8 @@ WinnerC2LossModel::CalculateLossInLos (Ptr<MobilityModel> a, Ptr<MobilityModel> 
 double 
 WinnerC2LossModel::CalculateLossInNlos (Ptr<MobilityModel> a, Ptr<MobilityModel> b, double d1, double d2) const
 {
-  double loss, htx, hrx;
+  double loss, htx;
   htx = a->GetAntennaHeight ();
-  hrx = b->GetAntennaHeight ();
   loss = (44.9 - 6.55 * log10 (htx)) * log10 (d1) + 34.46 + 5.83 * log10 (htx) + 23 * log10 (m_frequency / 5.0e9);       
   NS_LOG_DEBUG ("Distance d1 = " << d1 << " d2 = " << d2 << " loss NLOS = " << loss );
   return (loss);

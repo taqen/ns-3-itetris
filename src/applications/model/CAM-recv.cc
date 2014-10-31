@@ -122,7 +122,7 @@ void CAMrecv::HandleRead (Ptr<Socketc2c> socket)
   NS_LOG_FUNCTION (this << socket);
   Ptr<Packet> packet;
   packet=socket->Recv();
-  m_recvCount = m_recvCount++;
+  m_recvCount++;
 
   //---------------- check iTETRIS ----------------------------
   std::cout<<"CAM-recv APP : SUCCESS: Receiving CAM no. "<<m_recvCount<<" at "<<Simulator::Now ().GetSeconds ()<<

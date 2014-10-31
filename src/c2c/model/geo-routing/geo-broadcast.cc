@@ -115,10 +115,10 @@ geoBroadcast::RouteOutput (Ptr<Packet> p, c2cCommonHeader::LongPositionVector so
   }
   else
   {
-     c2cCommonHeader::ShortPositionVector m_posvector;
-     m_posvector.gnAddr = m_c2c->GetObject<Node>()->GetId ();
-     m_posvector.Lat = sourcePosVector.Lat;
-     m_posvector.Long = sourcePosVector.Long;
+//     c2cCommonHeader::ShortPositionVector m_posvector;
+//     m_posvector.gnAddr = m_c2c->GetObject<Node>()->GetId ();
+//     m_posvector.Lat = sourcePosVector.Lat;
+//     m_posvector.Long = sourcePosVector.Long;
     //---------------- check iTETRIS ----------------------------
 //    std::cout<<"GeoBroadcast RouteOutput at Node "<< m_c2c->GetObject<Node> ()->GetId ()<<" is NOT in the destination area "<<std::endl;
     //---------------- check iTETRIS ----------------------------

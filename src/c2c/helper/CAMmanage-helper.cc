@@ -42,6 +42,10 @@ CAMmanageHelper::CAMmanageHelper ()
 {
 }
 
+CAMmanageHelper::~CAMmanageHelper ()
+{
+}
+
 void 
 CAMmanageHelper::SetProtocol (std::string protocol)
 {

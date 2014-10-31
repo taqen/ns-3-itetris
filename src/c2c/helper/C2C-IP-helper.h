@@ -45,6 +45,8 @@ public:
    */
   C2CIPHelper (std::string SocketFactorytype1, std::string SocketFactorytype2);
 
+  virtual ~C2CIPHelper (void);
+
   void SetAttribute (std::string name, const AttributeValue &value);
 
   /**
