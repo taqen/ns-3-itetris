@@ -40,77 +40,74 @@ TypeId LteVehicleInstaller::GetTypeId (void)
   return tid;
 }
     
-NetDeviceContainer
-LteVehicleInstaller::DoInstall (NodeContainer container)
-{
-  NS_LOG_INFO ("*** LteVehicleInstaller ***");
 
-  NetDeviceContainer devices = lte->InstallUeDevice(container);
-  ueNodes.Add(container);
-  ueDevices.Add(devices);
+NetDeviceContainer LteVehicleInstaller::DoInstall(NodeContainer container) {
+	NS_LOG_INFO ("*** LteVehicleInstaller ***");
 
-  Ipv4InterfaceContainer ueIpIface = epcHelper->AssignUeIpv4Address(devices);
-  for (uint32_t u = 0; u < container.GetN (); ++u)
-  {
-	  Ptr<Node> ueNode = container.Get (u);
-	  // Set the default gateway for the UE
-	  Ptr<Ipv4StaticRouting> ueStaticRouting = ipv4RoutingHelper.GetStaticRouting (ueNode->GetObject<Ipv4> ());
-         ueStaticRouting->SetDefaultRoute (epcHelper->GetUeDefaultGatewayAddress (), 1);
-  }
-   uint32_t index = 0;
+	NetDeviceContainer devices = lte->InstallUeDevice(container);
+	ueNodes.Add(container);
+	ueDevices.Add(devices);
 
-  for (NodeContainer::Iterator i = container.Begin (); i != container.End (); i++)
-    {
-      if (!(*i)->IsMobileNode ())
-        {
-          NS_LOG_INFO ("Node LTE defined as MobileNode");
-	  (*i)->SetMobileNode (true);
-        }
+	Ipv4InterfaceContainer ueIpIface = epcHelper->AssignUeIpv4Address(devices);
+	for (uint32_t u = 0; u < container.GetN(); ++u) {
+		Ptr<Node> ueNode = container.Get(u);
+		// Set the default gateway for the UE
+		Ptr<Ipv4StaticRouting> ueStaticRouting =
+				ipv4RoutingHelper.GetStaticRouting(ueNode->GetObject<Ipv4>());
+		ueStaticRouting->SetDefaultRoute(
+				epcHelper->GetUeDefaultGatewayAddress(), 1);
+	}
+	uint32_t index = 0;
 
-      Ptr<NetDevice> device = devices.Get(index);
+	for (NodeContainer::Iterator i = container.Begin(); i != container.End();
+			i++) {
+		if (!(*i)->IsMobileNode()) {
+			NS_LOG_INFO ("Node LTE defined as MobileNode");
+			(*i)->SetMobileNode(true);
+		}
 
-      // Check if the NetDevice has the object LteScanMngr already installed
-      Ptr<VehicleScanMngr> vehicleScanMngr = device->GetObject <LteVehicleScanMngr> ();
-      if (vehicleScanMngr == NULL)
-	{
-          vehicleScanMngr = CreateObject <LteVehicleScanMngr> ();
-          vehicleScanMngr->SetNetDevice (device);
-	  vehicleScanMngr->SetNode (*i);	//Added by Sendoa
-	  (*i)->AggregateObject (vehicleScanMngr);
-          NS_LOG_INFO ("The object LteScanMngr has been attached to the NetDevice");
-        }
+		Ptr<NetDevice> device = devices.Get(index);
 
-      // Check if the vehicle has the object VehicleStaMgnt already installed
-      Ptr<VehicleStaMgnt> vehicleStaMgnt = (*i)->GetObject <VehicleStaMgnt> ();
-      if (vehicleStaMgnt == NULL)
-	{
-          vehicleStaMgnt = CreateObject <VehicleStaMgnt> ();
-          vehicleStaMgnt->SetNode (*i);
-          (*i)->AggregateObject (vehicleStaMgnt);
-          NS_LOG_INFO ("The object VehicleStaMgnt has been installed in the vehicle");
-        }
-      vehicleStaMgnt->AddIpTechnology ("Lte",device, vehicleScanMngr);
-      
+		// Check if the NetDevice has the object LteScanMngr already installed
+		Ptr<VehicleScanMngr> vehicleScanMngr = device->GetObject<
+				LteVehicleScanMngr>();
+		if (vehicleScanMngr == NULL) {
+			vehicleScanMngr = CreateObject<LteVehicleScanMngr>();
+			vehicleScanMngr->SetNetDevice(device);
+			vehicleScanMngr->SetNode(*i);	//Added by Sendoa
+			(*i)->AggregateObject(vehicleScanMngr);
+			NS_LOG_INFO ("The object LteScanMngr has been attached to the NetDevice");
+		}
+
+		// Check if the vehicle has the object VehicleStaMgnt already installed
+		Ptr<VehicleStaMgnt> vehicleStaMgnt = (*i)->GetObject<VehicleStaMgnt>();
+		if (vehicleStaMgnt == NULL) {
+			vehicleStaMgnt = CreateObject<VehicleStaMgnt>();
+			vehicleStaMgnt->SetNode(*i);
+			(*i)->AggregateObject(vehicleStaMgnt);
+			NS_LOG_INFO ("The object VehicleStaMgnt has been installed in the vehicle");
+		}
+		vehicleStaMgnt->AddIpTechnology("Lte", device, vehicleScanMngr);
+
 //      DynamicCast<LteNetDevice>(devices.Get(index))->SetIpAddress(); //TODO support
-      
-       // Check if the vehicle has the Facilties already installed
 
-      Ptr<IPCIUFacilities> facilities = (*i)->GetObject <IPCIUFacilities> ();
-      if (facilities == NULL)
-      {
-    	  IPCIUFacilitiesHelper facilitiesHelper;
-    	  facilitiesHelper.SetServiceListHelper (m_servListHelper);
-    	  facilitiesHelper.Install (*i);
-    	  NS_LOG_INFO ("The object IPCIUFacilities has been installed in the vehicle");
-      }
+		// Check if the vehicle has the Facilties already installed
 
-      index ++;
-    }
-  
-  lte->Attach(devices);
-  AddVehicles(enbNodes, devices);
+		Ptr<IPCIUFacilities> facilities = (*i)->GetObject<IPCIUFacilities>();
+		if (facilities == NULL) {
+			IPCIUFacilitiesHelper facilitiesHelper;
+			facilitiesHelper.SetServiceListHelper(m_servListHelper);
+			facilitiesHelper.Install(*i);
+			NS_LOG_INFO ("The object IPCIUFacilities has been installed in the vehicle");
+		}
 
-  return devices;
+		index++;
+	}
+
+	lte->Attach(devices);
+	AddVehicles(enbNodes, devices);
+
+	return devices;
 }
 
 } // namespace ns3
