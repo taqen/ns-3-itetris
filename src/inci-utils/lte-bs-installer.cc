@@ -51,9 +51,6 @@ LteBsInstaller::DoInstall (NodeContainer container)
 {
   NS_LOG_INFO ("*** LteBsInstaller ***");
   
-//  InternetStackHelper internet;
-//  internet.Install (container);
-
   NodeContainer::Iterator it = container.Begin();
   NodeContainer enbContainer;
   enbContainer.Create(container.GetN());
@@ -66,13 +63,10 @@ LteBsInstaller::DoInstall (NodeContainer container)
 	  ++it;
 	  ++enbit;
   }
-//  internet.Install (enbContainer);
 
   NetDeviceContainer edevices = lte->InstallEnbDevice(enbContainer);
-//  m_ipAddressHelper.Assign (edevices);
 
   NetDeviceContainer devices = lte->InstallUeDevice(container);
-//  m_ipAddressHelper.Assign(devices);
 
   enbNodes.Add(container);
 
@@ -128,9 +122,10 @@ LteBsInstaller::DoInstall (NodeContainer container)
       index ++;
     }
     
+  enbDevices.Add(devices);
   lte->Attach(devices);
   AddVehicles(container, ueDevices);
-  enbDevices.Add(devices);
+  AddVehicles(ueNodes, devices);
   return devices;
 }
 
