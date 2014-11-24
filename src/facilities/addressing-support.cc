@@ -34,7 +34,8 @@
 #include "ns3/vehicle-sta-mgnt.h" 
 #include "ns3/ip-base-sta-mgnt.h" 
 #include "ns3/rsu-sta-mgnt.h"
-
+#include "ns3/node-list.h"
+#include "ns3/ipv4.h"
 #include "addressing-support.h"
 
 NS_LOG_COMPONENT_DEFINE ("AddressingSupport");
@@ -139,25 +140,41 @@ AddressingSupport::getC2CTopoBroadcastAddress(uint32_t NHops)
 
 Ipv4Address* 
 AddressingSupport::getIPaddress(uint32_t destination)
-{      
-  if (m_node->IsMobileNode ())
-    {
-      Ptr<VehicleStaMgnt> staMgnt = m_node->GetObject<VehicleStaMgnt> ();
-      NS_ASSERT_MSG (staMgnt, "VehicleStaMgnt object not found in the vehicle");
-      Ipv4Address* ipAddress = staMgnt->GetIpAddress (destination);
-      if(ipAddress != NULL)
-      {
-         NS_LOG_LOGIC ("ipadress "<<ipAddress->Get());
-      }
-      return ipAddress; 
-    }
-  else
-    {
-      Ptr<IpBaseStaMgnt> staMgnt = m_node->GetObject<IpBaseStaMgnt> ();
-      NS_ASSERT_MSG (staMgnt, "IpBaseStaMgnt object not found in the CIU");
-      Ipv4Address* ipAddress = staMgnt->GetIpAddress (destination);
-      return ipAddress; 
-    }
+{
+	Ipv4Address* ipAddress;
+	if (m_node->IsMobileNode ())
+	{
+		Ptr<Node> dstNode = NodeList::GetNode(destination);
+
+		for(uint32_t i = 1; i < dstNode->GetNDevices(); ++i)
+		{
+			Ptr<NetDevice> device = dstNode->GetDevice(i);
+			std::string name = device->GetInstanceTypeId().GetName();
+			if( name == "ns3::LteUeNetDevice" || name == "ns3::LteEnbNetDevice")
+			{
+
+				Ipv4Address addr = m_node->GetObject<Ipv4>()->GetAddress(1,0).GetLocal();
+				ipAddress = &addr;
+				return ipAddress;
+			}
+		}
+
+		Ptr<VehicleStaMgnt> staMgnt = m_node->GetObject<VehicleStaMgnt> ();
+		NS_ASSERT_MSG (staMgnt, "VehicleStaMgnt object not found in the vehicle");
+		ipAddress = staMgnt->GetIpAddress (destination);
+		if(ipAddress != NULL)
+		{
+			NS_LOG_LOGIC ("ipadress "<<ipAddress->Get());
+		}
+		if(ipAddress != NULL)
+			return ipAddress;
+	}
+
+	Ptr<IpBaseStaMgnt> staMgnt = m_node->GetObject<IpBaseStaMgnt> ();
+	NS_ASSERT_MSG (staMgnt, "IpBaseStaMgnt object not found in the CIU");
+	ipAddress = staMgnt->GetIpAddress (destination);
+	return ipAddress;
+
 }
 
 } //namespace ns3
