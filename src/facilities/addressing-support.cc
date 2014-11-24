@@ -144,6 +144,10 @@ AddressingSupport::getIPaddress(uint32_t destination)
 	Ipv4Address* ipAddress;
 	if (m_node->IsMobileNode ())
 	{
+		//Given that the "destination" is the destination universtal node id,
+		//We can find that node and its allocated address. This might seem ugly BUT
+		//The rational is that a vehicle's packets we pass through the eNB anyway, so it doesn't
+		//make sense to modify LTE so we can probe all eNBs to request destination ipv4address
 		Ptr<Node> dstNode = NodeList::GetNode(destination);
 
 		for(uint32_t i = 1; i < dstNode->GetNDevices(); ++i)
